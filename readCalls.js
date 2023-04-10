@@ -1,8 +1,7 @@
-const { default: axios } = require("axios")
 const { GraphQLClient, gql } = require("graphql-request")
 
-const Token  = "00D2w00000RsbQL!ARIAQHt4sg55z.CzcjIIbY9tEORSuLaHk3ir0NNNBdisVrFeDyce8xR5BCggf0haZLJO7xKmmm3.7CSf9Tl3KgWBJIvuiS9H"
-const URL = "https://nineleaps-dev-ed.develop.my.salesforce.com/services/data/v57.0/graphql"
+const Token  = "00D2w00000Rsgrm!ARoAQGr0SxVCvaQZeprNWQhxOh1_x7R_40CB.3McsroHJXWbU2M87KxDtQMnFC5Pru_17OED7SGGcUqv5unj9aQAbRnMH.HN"
+const URL = "https://nineleaps5-dev-ed.develop.my.salesforce.com/services/data/v57.0/graphql"
 
 const graphqlClient = new GraphQLClient(URL, {
     headers: { 
@@ -202,13 +201,64 @@ const readFilteredOpportunity = async(status, month, year,day) =>{
     }
   }
   `;
-  const variables = {status,month,year,day}
+  const variables = {status,month,year,day};
   const resultArr = [];
-   const results = await graphqlClient.request({query , variables});
+   const results = await graphqlClient.request(query , variables);
    results.uiapi.query.Opportunity.edges.map(item =>{
     resultArr.push(item.node);
    });
-   return resultArr;
+   const totalCount = results.uiapi.query.Opportunity.totalCount;
+   return {resultArr,totalCount};
 }
 
-module.exports = {readAccounts, readLeads, readContacts, readOpportunity,readFilteredOpportunity}
+const readFilteredLeads = async(status, month, year,day) =>{
+  const query = gql`
+  query Lead($status : Picklist, $month : Long, $year : Long, $day :Long) {
+    uiapi {
+      query {
+        Lead (
+          where: {
+            and: [
+                {Status:{eq : $status}}
+              { CreatedDate: { CALENDAR_YEAR: { value: { eq: $year } }, CALENDAR_MONTH:{ value: { eq: $month }},  DAY_IN_MONTH: {value: { eq: $day} }} }
+            ]
+          }
+        ){
+          edges {
+            node {
+              Id
+              Name {
+                value
+              }
+              Email {
+                value
+              }
+              Status{
+                value
+              }
+              CreatedBy{
+                DisplayValue
+              }
+              CreatedDate{
+                value
+              }
+              
+            }
+          }
+          totalCount
+        }
+      }
+    }
+  }
+  `;
+  const variables = {status,month,year,day};
+  const resultArr = [];
+   const results = await graphqlClient.request(query , variables);
+   results.uiapi.query.Lead.edges.map(item =>{
+    resultArr.push(item.node);
+   });
+   const totalCount = results.uiapi.query.Lead.totalCount;
+   return {resultArr, totalCount};
+}
+
+module.exports = {readAccounts, readLeads, readContacts, readOpportunity,readFilteredOpportunity, readFilteredLeads}
