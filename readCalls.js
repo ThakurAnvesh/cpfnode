@@ -120,4 +120,95 @@ const readContacts = async() => {
     return resultArr;
 }
 
-module.exports = {readAccounts, readLeads, readContacts}
+const readOpportunity = async()=>{
+  const query = gql`
+  query Opportunity {
+    uiapi {
+      query {
+        Opportunity {
+          edges {
+            node {
+              Id
+              Name {
+                value
+              }
+              CloseDate{
+                value
+              }
+              CreatedDate{
+                value
+              }
+              StageName{
+                value
+              }
+              Description{
+                value
+              }
+              
+            }
+          }
+        }
+      }
+    }
+  }
+  `
+   const resultArr = []
+   const results = await graphqlClient.request(query);
+   results.uiapi.query.Opportunity.edges.map(item =>{
+    resultArr.push(item.node);
+   });
+   return resultArr;
+
+}
+
+const readFilteredOpportunity = async(status, month, year,day) =>{
+  const query = gql`
+  query opportunitiesClosingSoonExplicitAND($status : Picklist, $month : Long, $year : Long, $day :Long) {
+  uiapi {
+    query {
+      Opportunity(
+        where: {
+          and: [
+              {StageName:{eq : $status}}
+            { CloseDate: { CALENDAR_YEAR: { value: { eq: $year } }, CALENDAR_MONTH:{ value: { eq: $month }},  DAY_IN_MONTH: {value: { eq: $day} }} }
+          ]
+        }
+      ) { 
+        edges {
+          node {
+            Id
+            Name{
+                value
+            }
+            NextStep {
+              value
+            }
+            CloseDate {
+              value
+              displayValue
+            }
+            
+            Description {
+              value
+            }
+            StageName{
+                value
+            }
+          }
+        }
+        totalCount
+        }
+      }
+    }
+  }
+  `;
+  const variables = {status,month,year,day}
+  const resultArr = [];
+   const results = await graphqlClient.request({query , variables});
+   results.uiapi.query.Opportunity.edges.map(item =>{
+    resultArr.push(item.node);
+   });
+   return resultArr;
+}
+
+module.exports = {readAccounts, readLeads, readContacts, readOpportunity,readFilteredOpportunity}

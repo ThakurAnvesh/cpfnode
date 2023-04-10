@@ -1,5 +1,5 @@
 const express = require('express');
-const { readAccounts, readLeads, readContacts } = require('./readCalls');
+const { readAccounts, readLeads, readContacts, readOpportunity } = require('./readCalls');
 const app = express();
 
 app.get('/', (req, res) => {
@@ -16,6 +16,10 @@ app.get('/lead', async(req, res) => {
 
 app.get('/contact', async(req, res) => {
     res.send(await readContacts());
+});
+
+app.get('/opportunity', async(req, res) => {
+    res.send(await readOpportunity());
 });
 
 app.listen(3001, () => {
