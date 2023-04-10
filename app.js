@@ -1,6 +1,6 @@
 const express = require('express');
 const { readAccounts, readLeads, readContacts } = require('./readCalls');
-const { createAccount } = require('./writeCalls');
+const { createAccount, createLead } = require('./writeCalls');
 const app = express();
 
 app.get('/', (req, res) => {
@@ -22,6 +22,16 @@ app.get('/contact', async(req, res) => {
 app.post('/newAccount', async(req, res) => {
     await createAccount(req.query.name, req.query.shippingCity);
     return res.status(201).send("Account created!")
+});
+
+app.post('/newLead', async(req, res) => {
+    await createLead(req.query.firstName, req.query.lastName, req.query.company);
+    return res.status(201).send("Lead created!")
+});
+
+app.post('/newContact', async(req, res) => {
+    await createContact(req.query.firstName, req.query.lastName, req.query.accountId);
+    return res.status(201).send("Contact created!")
 });
 
 app.listen(3001, () => {

@@ -18,4 +18,27 @@ const createAccount = async(name, shippingCity) => {
         .catch(err => console.log(err)) 
 }
 
-module.exports = {createAccount}
+const createLead = async(firstName, lastName, company) => {
+    let requestBody = {
+            "FirstName" : firstName,
+            "LastName" : lastName,
+            "Company": company
+    }
+        
+    await axios.post("https://nineleaps-dev-ed.develop.my.salesforce.com/services/data/v57.0/sobjects/Lead", requestBody, config)
+        .then(res => console.log(res.status))
+        .catch(err => console.log(err)) 
+}
+
+const createContact = async(firstName, lastName, accountId) => {
+    let requestBody = {
+            "FirstName" : firstName,
+            "LastName" : lastName,
+            "AccountId": accountId
+    }
+        
+    await axios.post("https://nineleaps-dev-ed.develop.my.salesforce.com/services/data/v57.0/sobjects/Contact", requestBody, config)
+        .then(res => console.log(res.status))
+        .catch(err => console.log(err)) 
+}
+module.exports = {createAccount, createLead, createContact}
