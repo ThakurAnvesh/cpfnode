@@ -1,5 +1,6 @@
 const express = require('express');
 const { readAccounts, readLeads, readContacts } = require('./readCalls');
+const { createAccount } = require('./writeCalls');
 const app = express();
 
 app.get('/', (req, res) => {
@@ -16,6 +17,11 @@ app.get('/lead', async(req, res) => {
 
 app.get('/contact', async(req, res) => {
     res.send(await readContacts());
+});
+
+app.post('/newAccount', async(req, res) => {
+    await createAccount(req.query.name, req.query.shippingCity);
+    return res.status(201).send("Account created!")
 });
 
 app.listen(3001, () => {

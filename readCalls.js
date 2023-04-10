@@ -1,4 +1,3 @@
-const { default: axios } = require("axios")
 const { GraphQLClient, gql } = require("graphql-request")
 
 const Token  = "00D2w00000RsbQL!ARIAQHt4sg55z.CzcjIIbY9tEORSuLaHk3ir0NNNBdisVrFeDyce8xR5BCggf0haZLJO7xKmmm3.7CSf9Tl3KgWBJIvuiS9H"
