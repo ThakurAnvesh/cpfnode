@@ -13,8 +13,9 @@ const readAccounts = async(token) => {
         query accounts {
     uiapi {
          query {
-             Account(orderBy : {Name: {order: ASC}}) {
-                 edges {
+             Account(first: 50, orderBy : {Name: {order: ASC}}) {
+              totalCount   
+              edges {
                      node {
                          Id
                           Name {
@@ -53,6 +54,7 @@ const readAccounts = async(token) => {
     results.uiapi.query.Account.edges.map(item => {
         resultArr.push(item.node);
     });
+    resultArr.push(results.uiapi.query.Account.totalCount);
     return resultArr;
 }
 
@@ -62,7 +64,7 @@ const readLeads = async() => {
     query leads{
         uiapi{
             query{
-                Lead{
+                Lead(first: 50){
                     edges{
                         node{
                             Id
@@ -93,7 +95,7 @@ const readContacts = async() => {
         query contacts{
   uiapi{
     query{
-      Contact{
+      Contact(first: 50){
         edges{
           node{
             Id
@@ -123,7 +125,7 @@ const readOpportunity = async()=>{
   query Opportunity {
     uiapi {
       query {
-        Opportunity {
+        Opportunity(first: 50) {
           edges {
             node {
               Id
@@ -261,11 +263,65 @@ const readFilteredLeads = async(status, month, year,day) =>{
    return {resultArr, totalCount};
 }
 
-module.exports = {readAccounts, readLeads, readContacts, readOpportunity,readFilteredOpportunity, readFilteredLeads}
-
-
 //consumer key
 // 3MVG9n_HvETGhr3DS80tHTuDlemT7Sd2kecbZbGIe7FtvkjhgTsFQN9h_ptUAgG6sOuYogIq0gEBDYquEQ_OH
 
 //Secret
 // 36F8B2711A59FD03A884B3F960DC31EB9E969628A0291D2CF18E584A7CA6403E
+
+const readAccountByName = async(name)=>{
+  const query = gql` 
+    query accounts($name:String) {
+        uiapi {
+             query {
+                 Account(first: 50, 
+                 where:{
+                     and:[
+                          {Name:{eq : $name}}
+                     ]
+                 }) {
+                  totalCount   
+                  edges {
+                         node {
+                             Id
+                              Name {
+                                 value
+                             }
+                             AccountNumber{
+                               value
+                             }
+                             Contacts{
+                               edges{
+                                 node{
+                                   title: Name{
+                                     value
+                                   }
+                                 }
+                               }
+                             }
+                           Cases {
+                             edges {
+                               node {
+                                 CaseNumber {
+                                   value
+                                 }
+                               }
+                             }
+                           }
+                         }
+                     }
+                 }
+             }
+        }
+    }
+  `;
+  const resultArr = [];
+   const results = await graphqlClient.request(query ,{name});
+   results.uiapi.query.Account.edges.map(item =>{
+    resultArr.push(item.node);
+   });
+   resultArr.push(results.uiapi.query.Account.totalCount);
+   return resultArr;
+}
+
+module.exports = {readAccounts, readLeads, readContacts, readOpportunity,readFilteredOpportunity, readFilteredLeads,readAccountByName}

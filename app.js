@@ -1,5 +1,5 @@
 const express = require('express');
-const { readAccounts, readLeads, readContacts, readOpportunity, readFilteredOpportunity, readFilteredLeads } = require('./readCalls');
+const { readAccounts, readLeads, readContacts, readOpportunity, readFilteredOpportunity, readFilteredLeads, readAccountByName } = require('./readCalls');
 const { createAccount, createLead , createOpportunity} = require('./writeCalls');
 const {updateAccount, updateContact, updateLead, updateOpportunity} = require('./updateCalls');
 const app = express();
@@ -14,7 +14,9 @@ app.get('/', (req, res) => {
 app.get('/account', async(req, res) => {
     res.send(await readAccounts(Token));
 });
-
+app.get('/account/name', async(req, res) => {
+    res.send(await readAccountByName(req.query.name));
+});
 app.get('/lead', async(req, res) => {
     res.send(await readLeads());
 });
@@ -100,6 +102,6 @@ app.get('/getToken', function(req,res) {
   });
 });
 
-app.listen(3001, () => {
+app.listen(3002, () => {
     console.log('Server started on port 3001')
 })
