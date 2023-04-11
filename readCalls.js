@@ -10,44 +10,46 @@ const graphqlClient = new GraphQLClient(URL, {
     
 const readAccounts = async(token) => {  
   const query = gql`
-        query accounts {
-    uiapi {
-         query {
-             Account(first: 50, orderBy : {Name: {order: ASC}}) {
-              totalCount   
-              edges {
-                     node {
-                         Id
-                          Name {
-                             value
-                         }
-                         AccountNumber{
-                           value
-                         }
-                         Contacts{
-                           edges{
-                             node{
-                               title: Name{
+      query accounts {
+        uiapi {
+             query {
+                 Account(first: 50,orderBy : {Name: {order: ASC}}) {
+                     edges {
+                         node {
+                             Id
+                              Name {
                                  value
+                             }
+                             AccountNumber{
+                               value
+                             }
+                             Phone{
+                                 value
+                             }
+                             Contacts{
+                               edges{
+                                 node{
+                                   title: Name{
+                                     value
+                                   }
+                                 }
+                               }
+                             }
+                           Cases {
+                             edges {
+                               node {
+                                 CaseNumber {
+                                   value
+                                 }
                                }
                              }
                            }
                          }
-                       Cases {
-                         edges {
-                           node {
-                             CaseNumber {
-                               value
-                             }
-                           }
-                         }
-                       }
                      }
                  }
              }
-         }
-    }
-}    
+        }
+    }    
     `
     const resultArr = []
     const results = await graphqlClient.request(query); 
@@ -62,24 +64,32 @@ const readAccounts = async(token) => {
 const readLeads = async() => {    
     const query = gql`
     query leads{
-        uiapi{
-            query{
-                Lead(first: 50){
-                    edges{
-                        node{
-                            Id
-                            Name{
-                                value
-                            }
-                            Company{
-                                value
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
+      uiapi{
+          query{
+              Lead(first: 50){
+                  edges{
+                      node{
+                          Id
+                          Name{
+                              value
+                          }
+                          Company{
+                              value
+                          }
+                          Status{
+                              value
+                          }
+                          LeadSource{
+                              value
+                          }
+                      
+                      }
+                  }
+              }
+          }
+      }
+  }
+
 ` 
     const resultArr = []
     const results = await graphqlClient.request(query); 
@@ -144,7 +154,22 @@ const readOpportunity = async()=>{
               Description{
                 value
               }
-              
+              Amount{
+                  value
+              }
+              Account
+              {
+                  DisplayValue
+              }
+              StageName{
+                  value
+              }
+              Probability{
+                  value
+              }
+              LeadSource{
+                  value
+              }              
             }
           }
         }
