@@ -201,7 +201,13 @@ const readFilteredOpportunity = async(status, month, year,day) =>{
     }
   }
   `;
-  const variables = {status,month,year,day};
+  let variables = {};
+
+  variables = status && {...variables, status};
+  variables = month && {...variables, month};
+  variables = year && {...variables, year};
+  variables = day && {...variables, day};
+
   const resultArr = [];
    const results = await graphqlClient.request(query , variables);
    results.uiapi.query.Opportunity.edges.map(item =>{
@@ -251,7 +257,13 @@ const readFilteredLeads = async(status, month, year,day) =>{
     }
   }
   `;
-  const variables = {status,month,year,day};
+  let variables = {};
+
+  variables = status && {...variables, status};
+  variables = month && {...variables, month};
+  variables = year && {...variables, year};
+  variables = day && {...variables, day}
+
   const resultArr = [];
    const results = await graphqlClient.request(query , variables);
    results.uiapi.query.Lead.edges.map(item =>{
