@@ -1,6 +1,7 @@
 const { default: axios } = require("axios")
 
-const Token  = "00D2w00000Rsgrm!ARoAQP1pQOUl1OBvQIWQzZk3DvUmfA57YMYz_HFPS5vj5WvvYmBDdEDej7t3eq9JFKh0vcVD19jkEjS9SvatQg9UJG3y61Bk"
+const Token  = "00D2w00000Rsgrm!ARoAQKCwVPOQea847RxAmzTTna4WFFnUT7k6xEMiwsdd9AF_tOcogY.ooW_yyehftOe8_H2lJ4YAcHn0.rrsFZs_TZmsY.Pg"
+const URL = "https://nineleaps5-dev-ed.develop.my.salesforce.com/services/data/v57.0/sobjects"
 
 const config = {
         headers: { Authorization: `Bearer ${Token}`  } 
@@ -12,8 +13,12 @@ const updateAccount = async(id ,name, shippingCity) => {
             "ShippingCity" : shippingCity,
     }   
     let error = '';
-    await axios.patch(`https://nineleaps5-dev-ed.develop.my.salesforce.com/services/data/v57.0/sobjects/Account/${id}`, requestBody, config)
-    .catch(err => {error = err.code});
+    await axios.patch(`${URL}/Account/${id}`, requestBody, config)
+    .then(res => console.log(res.status))
+    .catch(err => {
+        console.log(err);
+        error = err.code
+    });
     return error;
 }
 
@@ -24,7 +29,7 @@ const updateLead = async(id,firstName, lastName, company) => {
             "Company": company
     }
     let error = '';
-    await axios.post(`https://nineleaps5-dev-ed.develop.my.salesforce.com/services/data/v57.0/sobjects/Lead/${id}`, requestBody, config)
+    await axios.post(`${URL}/Lead/${id}`, requestBody, config)
         .catch(err => error = err.code);
         return error; 
 }
@@ -36,7 +41,7 @@ const updateContact = async(id,firstName, lastName, accountId) => {
             "AccountId": accountId
     }
     let error = ''; 
-    await axios.post(`https://nineleaps5-dev-ed.develop.my.salesforce.com/services/data/v57.0/sobjects/Contact/${id}`, requestBody, config)
+    await axios.post(`${URL}/Contact/${id}`, requestBody, config)
         .catch(err => error = err.code);
         return error; 
 }
@@ -48,8 +53,9 @@ const updateOpportunity = async(id,name, stageName, closeDate) => {
                 "CloseDate" : closeDate
         }
         let error = '';
-        await axios.post(`https://nineleaps5-dev-ed.develop.my.salesforce.com/services/data/v57.0/sobjects/Opportunity/${id}`, requestBody, config)
+        await axios.post(`${URL}/Opportunity/${id}`, requestBody, config)
         .catch(err => error = err.code);
         return error;  
     }
+    
 module.exports = {updateAccount, updateContact, updateLead, updateOpportunity}

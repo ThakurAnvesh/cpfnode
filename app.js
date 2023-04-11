@@ -1,6 +1,7 @@
 const express = require('express');
 const { readAccounts, readLeads, readContacts, readOpportunity, readFilteredOpportunity, readFilteredLeads } = require('./readCalls');
 const { createAccount, createLead , createOpportunity} = require('./writeCalls');
+const {updateAccount, updateContact, updateLead, updateOpportunity} = require('./updateCalls');
 const app = express();
 const jsforce = require('jsforce');
 
@@ -27,13 +28,13 @@ app.get('/opportunity', async(req, res) => {
 });
 
 app.get("/filterOpportunity", async(req,res)=>{
-    res.send(await readFilteredOpportunity(req.query.status, req.query.month, req.query.year, req.query.day) );
+    res.send(await readFilteredOpportunity(req?.query?.status, req?.query?.month, req?.query?.year, req?.query?.day) );
 })
 app.get("/filterLeads", async(req,res)=>{
     res.send(await readFilteredLeads(req.query.status, req.query.month, req.query.year, req.query.day) );
 })
 app.post('/newAccount', async(req, res) => {
-    await createAccount("ad","fdf","fdd");
+    await createAccount(req.query.name, req.query.shippingCity);
     return res.status(201).send("Account created!")
 });
 
@@ -54,7 +55,9 @@ app.post('/newOpportunity', async(req, res) => {
 app.patch('/updateAccount',async(req,res)=>{
 
     const response = await updateAccount(req.query.id, req.query.Name, req.query.shippingCity);
-    response === '' ? res.send({status:"Success"}).status(204) : res.send({status:response})
+    response === '' 
+        ? res.send({status:"Success"}).status(204) 
+        : res.send({status:response})
 })
 app.patch('/updateLead',async(req,res)=>{
 
@@ -72,9 +75,6 @@ app.patch('/updateOpportunity',async(req,res)=>{
     response === '' ? res.send({status:"Success"}).status(204) : res.send({status:response})
 })
 
-app.listen(3002, () => {
-    console.log('Server started on port 3002')
-});
 app.get('/oauth2/auth', async(req, res) => {
     // userLogin();
     const outh2 = new jsforce.OAuth2({
@@ -102,6 +102,6 @@ app.get('/getToken', function(req,res) {
   });
 });
 
-// app.listen(3001, () => {
-//     console.log('Server started on port 3001')
-// })
+app.listen(3001, () => {
+    console.log('Server started on port 3001')
+})
