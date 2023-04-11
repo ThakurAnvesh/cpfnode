@@ -1,8 +1,8 @@
 const { GraphQLClient, gql } = require("graphql-request")
 
-const Token  = "00D2w00000RsbQL!ARIAQJ90WwnmLu..mbmt4JVVDslDdY_sebec4uWILg0nOHIZ9l9rX0BIPgDyswjyuBLA88msyGblTjYPkygdAD0g3FVclz2s"
-const URL = "https://nineleaps-dev-ed.develop.my.salesforce.com/services/data/v57.0/graphql"
+const Token  = "00D2w00000RskIo!AQkAQLBc5GNWnHxS00yBG2L0r9goXp8Ga3EsYgNB.qmScfDfrz8etDXXxvDzquyPfI3J8L8wLZix7zgLzVZ.mViu6vWm07EU"
 
+const URL = "https://nineleapstechnologysolutio2-dev-ed.develop.my.salesforce.com/services/data/v57.0/graphql"
 const graphqlClient = new GraphQLClient(URL, {
     headers: { 
             Authorization: `Bearer ${Token}`

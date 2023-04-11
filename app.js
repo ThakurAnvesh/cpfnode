@@ -28,10 +28,10 @@ app.get('/opportunity', async(req, res) => {
 });
 
 app.get("/filterOpportunity", async(req,res)=>{
-    res.send(await readFilteredOpportunity(req.query.status, req.query.month, req.query.year, req.query) );
+    res.send(await readFilteredOpportunity(req.query.status, req.query.month, req.query.year, req.query.day) );
 })
 app.get("/filterLeads", async(req,res)=>{
-    res.send(await readFilteredLeads(req.query.status, req.query.month, req.query.year, req.query) );
+    res.send(await readFilteredLeads(req.query.status, req.query.month, req.query.year, req.query.day) );
 })
 app.post('/newAccount', async(req, res) => {
     await createAccount(req.query.name, req.query.shippingCity);
@@ -56,23 +56,23 @@ app.patch('/updateAccount',async(req,res)=>{
 
     const response = await updateAccount(req.query.id, req.query.Name, req.query.shippingCity);
     response === '' 
-        ? res.send({status:"Success"}) 
+        ? res.send({status:"Success"}).status(204)
         : res.send({status:response})
 })
 app.patch('/updateLead',async(req,res)=>{
 
     const response = await updateLead(req.query.id, req.query.firstName, req.query.lastName, req.query.company);
-    response === '' ? res.send({status:"Success"}) : res.send({status:"response"})
+    response === '' ? res.send({status:"Success"}).status(204) : res.send({status:response})
 })
 app.patch('/updateContact',async(req,res)=>{
 
     const response = await updateContact(req.query.id, req.query.firstName, req.query.lastName, req.query.accountId);
-    response === '' ? res.send({status:"Success"}) : res.send({status:"response"})
+    response === '' ? res.send({status:"Success"}).status(204) : res.send({status:response})
 })
 app.patch('/updateOpportunity',async(req,res)=>{
 
     const response = await updateOpportunity(req.query.id, req.query.name, req.query.stageName, req.query.closeDate);
-    response === '' ? res.send({status:"Success"}) : res.send({status:"response"})
+    response === '' ? res.send({status:"Success"}).status(204) : res.send({status:response})
 })
 
 app.get('/oauth2/auth', async(req, res) => {
