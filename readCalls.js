@@ -11,43 +11,72 @@ const graphqlClient = new GraphQLClient(URL, {
     
 const readAccounts = async(token) => {  
   const query = gql`
-        query accounts {
-    uiapi {
-         query {
-             Account(orderBy : {Name: {order: ASC}}) {
-                 edges {
-                     node {
-                         Id
-                          Name {
-                             value
-                         }
-                         AccountNumber{
-                           value
-                         }
-                         Contacts{
-                           edges{
-                             node{
-                               title: Name{
+  #   query leads{
+    #         uiapi{
+    #             query{
+    #                 Lead{
+    #                     edges{
+    #                         node{
+    #                             Id
+    #                             Name{
+    #                                 value
+    #                             }
+    #                             Company{
+    #                                 value
+    #                             }
+    #                             Status{
+    #                                 value
+    #                             }
+    #                             LeadSource{
+    #                                 value
+    #                             }
+                            
+    #                         }
+    #                     }
+    #                 }
+    #             }
+    #         }
+    #     }
+            query accounts {
+        uiapi {
+             query {
+                 Account(orderBy : {Name: {order: ASC}}) {
+                     edges {
+                         node {
+                             Id
+                              Name {
                                  value
+                             }
+                             AccountNumber{
+                               value
+                             }
+                             Phone{
+                                 value
+                             }
+                             Contacts{
+                               edges{
+                                 node{
+                                   title: Name{
+                                     value
+                                   }
+                                 }
+                               }
+                             }
+                           Cases {
+                             edges {
+                               node {
+                                 CaseNumber {
+                                   value
+                                 }
                                }
                              }
                            }
                          }
-                       Cases {
-                         edges {
-                           node {
-                             CaseNumber {
-                               value
-                             }
-                           }
-                         }
-                       }
                      }
                  }
              }
-         }
-    }
-}    
+        }
+    }    
     `
     const resultArr = []
     const results = await graphqlClient.request(query); 
@@ -61,24 +90,32 @@ const readAccounts = async(token) => {
 const readLeads = async() => {    
     const query = gql`
     query leads{
-        uiapi{
-            query{
-                Lead{
-                    edges{
-                        node{
-                            Id
-                            Name{
-                                value
-                            }
-                            Company{
-                                value
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
+      uiapi{
+          query{
+              Lead{
+                  edges{
+                      node{
+                          Id
+                          Name{
+                              value
+                          }
+                          Company{
+                              value
+                          }
+                          Status{
+                              value
+                          }
+                          LeadSource{
+                              value
+                          }
+                      
+                      }
+                  }
+              }
+          }
+      }
+  }
+
 ` 
     const resultArr = []
     const results = await graphqlClient.request(query); 
@@ -143,7 +180,22 @@ const readOpportunity = async()=>{
               Description{
                 value
               }
-              
+              Amount{
+                  value
+              }
+              Account
+              {
+                  DisplayValue
+              }
+              StageName{
+                  value
+              }
+              Probability{
+                  value
+              }
+              LeadSource{
+                  value
+              }              
             }
           }
         }
