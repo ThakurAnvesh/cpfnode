@@ -1,7 +1,7 @@
 const { default: axios } = require("axios")
 
 const Token  = "00D2w00000Rsgrm!ARoAQKCwVPOQea847RxAmzTTna4WFFnUT7k6xEMiwsdd9AF_tOcogY.ooW_yyehftOe8_H2lJ4YAcHn0.rrsFZs_TZmsY.Pg"
-const URL = "https://nineleaps5-dev-ed.develop.my.salesforce.com/services/data/v57.0/sobj"
+const URL = "https://nineleaps5-dev-ed.develop.my.salesforce.com/services/data/v57.0/sobjects"
 
 const config = {
         headers: { Authorization: `Bearer ${Token}`  } 
