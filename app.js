@@ -1,15 +1,17 @@
 const express = require('express');
 const { readAccounts, readLeads, readContacts, readOpportunity, readFilteredOpportunity, readFilteredLeads } = require('./readCalls');
 const { createAccount, createLead , createOpportunity} = require('./writeCalls');
-const {updateAccount, updateLead, updateContact, updateOpportunity} = require('./updateCalls');
 const app = express();
+const jsforce = require('jsforce');
+
+let Token = '';
 
 app.get('/', (req, res) => {
     res.send("Hey! Welcome to Copilot force");
 })
 
 app.get('/account', async(req, res) => {
-    res.send(await readAccounts());
+    res.send(await readAccounts(Token));
 });
 
 app.get('/lead', async(req, res) => {
@@ -72,4 +74,34 @@ app.patch('/updateOpportunity',async(req,res)=>{
 
 app.listen(3002, () => {
     console.log('Server started on port 3002')
-})
+});
+app.get('/oauth2/auth', async(req, res) => {
+    // userLogin();
+    const outh2 = new jsforce.OAuth2({
+        clientId: '3MVG9n_HvETGhr3DS80tHTuDlemT7Sd2kecbZbGIe7FtvkjhgTsFQN9h_ptUAgG6sOuYogIq0gEBDYquEQ_OH',
+        clientSecret: '36F8B2711A59FD03A884B3F960DC31EB9E969628A0291D2CF18E584A7CA6403E',
+        redirectUri: 'http://localhost:3001/getToken'
+    });
+    res.redirect(outh2.getAuthorizationUrl({}));
+});
+
+app.get('/getToken', function(req,res) {
+  const conn = new jsforce.Connection(
+    { oauth2: new jsforce.OAuth2({
+        clientId: '3MVG9n_HvETGhr3DS80tHTuDlemT7Sd2kecbZbGIe7FtvkjhgTsFQN9h_ptUAgG6sOuYogIq0gEBDYquEQ_OH',
+        clientSecret: '36F8B2711A59FD03A884B3F960DC31EB9E969628A0291D2CF18E584A7CA6403E',
+        redirectUri: 'http://localhost:3001/getToken'
+  })});
+  
+  conn.authorize(req.query.code, function(err, userInfo) {
+    if (err) {
+      return console.error(err);
+    }
+    Token = conn.accessToken;
+    console.log(conn.accessToken, conn.instanceUrl); // access token via oauth2
+  });
+});
+
+// app.listen(3001, () => {
+//     console.log('Server started on port 3001')
+// })

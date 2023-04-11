@@ -9,8 +9,8 @@ const graphqlClient = new GraphQLClient(URL, {
     },
 });
     
-const readAccounts = async() => {    
-    const query = gql`
+const readAccounts = async(token) => {  
+  const query = gql`
         query accounts {
     uiapi {
          query {
@@ -274,3 +274,10 @@ const readFilteredLeads = async(status, month, year,day) =>{
 }
 
 module.exports = {readAccounts, readLeads, readContacts, readOpportunity,readFilteredOpportunity, readFilteredLeads}
+
+
+//consumer key
+// 3MVG9n_HvETGhr3DS80tHTuDlemT7Sd2kecbZbGIe7FtvkjhgTsFQN9h_ptUAgG6sOuYogIq0gEBDYquEQ_OH
+
+//Secret
+// 36F8B2711A59FD03A884B3F960DC31EB9E969628A0291D2CF18E584A7CA6403E
