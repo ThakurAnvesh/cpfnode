@@ -55,9 +55,7 @@ app.post('/newOpportunity', async(req, res) => {
 app.patch('/updateAccount',async(req,res)=>{
 
     const response = await updateAccount(req.query.id, req.query.Name, req.query.shippingCity);
-    response === '' 
-        ? res.send({status:"Success"}).status(204) 
-        : res.send({status:response})
+    response === '' ? res.send({status:"Success"}).status(204) : res.send({status:response})
 })
 app.patch('/updateLead',async(req,res)=>{
 
