@@ -28,7 +28,7 @@ app.get('/opportunity', async(req, res) => {
 });
 
 app.get("/filterOpportunity", async(req,res)=>{
-    res.send(await readFilteredOpportunity(req.query.status, req.query.month, req.query.year, req.query.day) );
+    res.send(await readFilteredOpportunity(req?.query?.status, req?.query?.month, req?.query?.year, req?.query?.day) );
 })
 app.get("/filterLeads", async(req,res)=>{
     res.send(await readFilteredLeads(req.query.status, req.query.month, req.query.year, req.query.day) );
@@ -55,9 +55,7 @@ app.post('/newOpportunity', async(req, res) => {
 app.patch('/updateAccount',async(req,res)=>{
 
     const response = await updateAccount(req.query.id, req.query.Name, req.query.shippingCity);
-    response === '' 
-        ? res.send({status:"Success"}).status(204)
-        : res.send({status:response})
+    response === '' ? res.send({status:"Success"}).status(204) : res.send({status:response})
 })
 app.patch('/updateLead',async(req,res)=>{
 

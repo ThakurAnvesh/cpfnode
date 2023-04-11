@@ -1,17 +1,17 @@
 const { default: axios } = require("axios")
 
-const Token  = "00D2w00000RskIo!AQkAQLBc5GNWnHxS00yBG2L0r9goXp8Ga3EsYgNB.qmScfDfrz8etDXXxvDzquyPfI3J8L8wLZix7zgLzVZ.mViu6vWm07EU"
-const URL = "https://nineleapstechnologysolutio2-dev-ed.develop.my.salesforce.com/services/data/v57.0/sobjects"
+const Token  = "00D2w00000Rsgrm!ARoAQKCwVPOQea847RxAmzTTna4WFFnUT7k6xEMiwsdd9AF_tOcogY.ooW_yyehftOe8_H2lJ4YAcHn0.rrsFZs_TZmsY.Pg"
+const URL = "https://nineleaps5-dev-ed.develop.my.salesforce.com/services/data/v57.0/sobjects"
+
 const config = {
         headers: { Authorization: `Bearer ${Token}`  } 
     };
 
-const createAccount = async(name, shippingCity) => {
+const createAccount = async(name,shippingCity) => {
     let requestBody = {
             "Name" : name,
             "ShippingCity" : shippingCity,
     }
-        
     await axios.post(`${URL}/Account`, requestBody, config)
         .then(res => console.log(res.status))
         .catch(err => console.log(err)) 

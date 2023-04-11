@@ -1,8 +1,7 @@
 const { GraphQLClient, gql } = require("graphql-request")
 
-const Token  = "00D2w00000RskIo!AQkAQLBc5GNWnHxS00yBG2L0r9goXp8Ga3EsYgNB.qmScfDfrz8etDXXxvDzquyPfI3J8L8wLZix7zgLzVZ.mViu6vWm07EU"
-
-const URL = "https://nineleapstechnologysolutio2-dev-ed.develop.my.salesforce.com/services/data/v57.0/graphql"
+const Token  = "00D2w00000Rsgrm!ARoAQKCwVPOQea847RxAmzTTna4WFFnUT7k6xEMiwsdd9AF_tOcogY.ooW_yyehftOe8_H2lJ4YAcHn0.rrsFZs_TZmsY.Pg"
+const URL = "https://nineleaps5-dev-ed.develop.my.salesforce.com/services/data/v57.0/graphql"
 const graphqlClient = new GraphQLClient(URL, {
     headers: { 
             Authorization: `Bearer ${Token}`
@@ -253,12 +252,7 @@ const readFilteredOpportunity = async(status, month, year,day) =>{
     }
   }
   `;
-  let variables = {};
-
-  variables = status && {...variables, status};
-  variables = month && {...variables, month};
-  variables = year && {...variables, year};
-  variables = day && {...variables, day};
+  let variables = {status,month,year,day};
 
   const resultArr = [];
    const results = await graphqlClient.request(query , variables);
@@ -309,15 +303,9 @@ const readFilteredLeads = async(status, month, year,day) =>{
     }
   }
   `;
-  let variables = {};
-
-  variables = status && {...variables, status};
-  variables = month && {...variables, month};
-  variables = year && {...variables, year};
-  variables = day && {...variables, day}
-
+  let variables ={status,month,year,day};
   const resultArr = [];
-   const results = await graphqlClient.request(query , variables);
+   const results = await graphqlClient.request(query ,variables);
    results.uiapi.query.Lead.edges.map(item =>{
     resultArr.push(item.node);
    });
