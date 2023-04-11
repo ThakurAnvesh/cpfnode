@@ -1,6 +1,7 @@
 const express = require('express');
 const { readAccounts, readLeads, readContacts, readOpportunity, readFilteredOpportunity, readFilteredLeads } = require('./readCalls');
 const { createAccount, createLead , createOpportunity} = require('./writeCalls');
+const {updateAccount, updateContact, updateLead, updateOpportunity} = require('./updateCalls');
 const app = express();
 const jsforce = require('jsforce');
 
@@ -54,7 +55,9 @@ app.post('/newOpportunity', async(req, res) => {
 app.patch('/updateAccount',async(req,res)=>{
 
     const response = await updateAccount(req.query.id, req.query.Name, req.query.shippingCity);
-    response === '' ? res.send({status:"Success"}) : res.send({status:"response"})
+    response === '' 
+        ? res.send({status:"Success"}) 
+        : res.send({status:response})
 })
 app.patch('/updateLead',async(req,res)=>{
 
