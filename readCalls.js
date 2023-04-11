@@ -1,7 +1,7 @@
 const { GraphQLClient, gql } = require("graphql-request")
 
-const Token  = "00D2w00000Rsgrm!ARoAQGr0SxVCvaQZeprNWQhxOh1_x7R_40CB.3McsroHJXWbU2M87KxDtQMnFC5Pru_17OED7SGGcUqv5unj9aQAbRnMH.HN"
-const URL = "https://nineleaps5-dev-ed.develop.my.salesforce.com/services/data/v57.0/graphql"
+const Token  = "00D2w00000RsbQL!ARIAQJ90WwnmLu..mbmt4JVVDslDdY_sebec4uWILg0nOHIZ9l9rX0BIPgDyswjyuBLA88msyGblTjYPkygdAD0g3FVclz2s"
+const URL = "https://nineleaps-dev-ed.develop.my.salesforce.com/services/data/v57.0/graphql"
 
 const graphqlClient = new GraphQLClient(URL, {
     headers: { 
@@ -9,8 +9,8 @@ const graphqlClient = new GraphQLClient(URL, {
     },
 });
     
-const readAccounts = async() => {    
-    const query = gql`
+const readAccounts = async(token) => {  
+  const query = gql`
         query accounts {
     uiapi {
          query {
@@ -262,3 +262,10 @@ const readFilteredLeads = async(status, month, year,day) =>{
 }
 
 module.exports = {readAccounts, readLeads, readContacts, readOpportunity,readFilteredOpportunity, readFilteredLeads}
+
+
+//consumer key
+// 3MVG9n_HvETGhr3DS80tHTuDlemT7Sd2kecbZbGIe7FtvkjhgTsFQN9h_ptUAgG6sOuYogIq0gEBDYquEQ_OH
+
+//Secret
+// 36F8B2711A59FD03A884B3F960DC31EB9E969628A0291D2CF18E584A7CA6403E
