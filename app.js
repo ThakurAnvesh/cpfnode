@@ -4,6 +4,10 @@ const { createAccount, createLead , createOpportunity} = require('./writeCalls')
 const {updateAccount, updateContact, updateLead, updateOpportunity} = require('./updateCalls');
 const app = express();
 const jsforce = require('jsforce');
+const bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(bodyParser.json());
 
 let Token = '';
 
@@ -36,42 +40,41 @@ app.get("/filterLeads", async(req,res)=>{
     res.send(await readFilteredLeads(req.query.status, req.query.month, req.query.year, req.query.day) );
 })
 app.post('/newAccount', async(req, res) => {
-    const response = await createAccount(req.query.name, req.query.shippingCity);
-    response === '' ? res.send({status:"success"}).status(201) : res.send({error : "Provide required fields"})
+    const response = await createAccount(req.query.name, req.query.shippingCity, req.query);
+    response === '' ? res.send({status:"success"}).status(201) : res.send({error : response})
 });
 
 app.post('/newLead', async(req, res) => {
-    const response = await createLead(req.query.firstName, req.query.lastName, req.query.company);
-    response === '' ? res.send({status:"success"}).status(201) : res.send({error : "Provide required fields"})
+    const response = await createLead(req.query.firstName, req.query.lastName, req.query.company, req.query);
+    response === '' ? res.send({status:"success"}).status(201) : res.send({error : response})
 });
 
 app.post('/newContact', async(req, res) => {
-    const response = await createContact(req.query.firstName, req.query.lastName, req.query.accountId);
-    response === '' ? res.send({status:"success"}).status(201) : res.send({error : "Provide required fields"})
+    const response = await createContact(req.query.firstName, req.query.lastName, req.query.accountId, req.query);
+    response === '' ? res.send({status:"success"}).status(201) : res.send({error : response})
 });
 
 app.post('/newOpportunity', async(req, res) => {
-    const response = await createOpportunity(req.query.name, req.query.stageName, req.query.closeDate);
-    response === '' ? res.send({status:"success"}).status(201) : res.send({error : "Provide required fields"})
+    const response = await createOpportunity(req.query.name, req.query.stageName, req.query.closeDate, req.query);
+    response === '' ? res.send({status:"success"}).status(201) : res.send({error : response})
 })
 app.patch('/updateAccount',async(req,res)=>{
 
-    const response = await updateAccount(req.query.id, req.query.Name, req.query.shippingCity);
+    const response = await updateAccount(req.body.id, req.query);
     response === '' ? res.send({status:"Success"}).status(204) : res.send({status:response})
 })
 app.patch('/updateLead',async(req,res)=>{
-
-    const response = await updateLead(req.query.id, req.query.firstName, req.query.lastName, req.query.company);
+    const response = await updateLead(req.body.id,req.query);
     response === '' ? res.send({status:"Success"}).status(204) : res.send({status:response})
 })
 app.patch('/updateContact',async(req,res)=>{
 
-    const response = await updateContact(req.query.id, req.query.firstName, req.query.lastName, req.query.accountId);
+    const response = await updateContact(req.body.id, req.query);
     response === '' ? res.send({status:"Success"}).status(204) : res.send({status:response})
 })
 app.patch('/updateOpportunity',async(req,res)=>{
 
-    const response = await updateOpportunity(req.query.id, req.query.name, req.query.stageName, req.query.closeDate);
+    const response = await updateOpportunity(req.body.id, req.query);
     response === '' ? res.send({status:"Success"}).status(204) : res.send({status:response})
 })
 

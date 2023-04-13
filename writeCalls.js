@@ -7,53 +7,39 @@ const config = {
         headers: { Authorization: `Bearer ${Token}`  } 
     };
 
-const createAccount = async(name,shippingCity) => {
-    let requestBody = {
-            "Name" : name,
-            "ShippingCity" : shippingCity,
-    }
+const createAccount = async(name,shippingCity,...args) => {
+    if(!name || !shippingCity) return "Provide all fields";
+
     let error = '';
-    await axios.post(`${URL}/Account`, requestBody, config)
+    await axios.post(`${URL}/Account`, ...args, config)
         .then(res => console.log(res.status))
         .catch(err => error = err.code);
          return error; 
 }
 
-const createLead = async(firstName, lastName, company) => {
-    let requestBody = {
-             firstName,
-             lastName,
-            company,
-    }
-        
+const createLead = async(firstName, lastName, company, ...args) => {
+
+    if(!firstName || !lastName || !company ) return "Provide all fields";        
     let error = '';
-    await axios.post(`${URL}/Lead`, requestBody, config)
+    await axios.post(`${URL}/Lead`, ...args, config)
         .then(res => console.log(res.status))
         .catch(err => error = err.code);
         return error; 
 }
 
-const createContact = async(firstName, lastName, accountId) => {
-    let requestBody = {
-            "FirstName" : firstName,
-            "LastName" : lastName,
-            "AccountId": accountId
-    }
+const createContact = async(firstName, lastName, accountId, ...args) => {
+    if(!firstName || !lastName || !accountId) return "Provide all fields";
     let error = '';
-    await axios.post(`${URL}/Contact`, requestBody, config)
+    await axios.post(`${URL}/Contact`, ...args, config)
         .then(res => console.log(res.status))
         .catch(err => error = err.code);
         return error;  
 }
 
-const createOpportunity = async(name, stageName, closeDate) => {
-        let requestBody = {
-                "Name" : name,
-                "StageName" : stageName,
-                "CloseDate" : closeDate
-        }
+const createOpportunity = async(name, stageName, closeDate , ...args) => {
+        if(!name || !stageName || !closeDate) return "Provide all fields";
         let error = '';
-        await axios.post(`${URL}/Opportunity`, requestBody, config)
+        await axios.post(`${URL}/Opportunity`, ...args, config)
             .then(res => console.log(res.status))
             .catch(err => error = err.code);
              return error; 
