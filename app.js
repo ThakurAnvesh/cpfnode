@@ -60,21 +60,21 @@ app.post('/newOpportunity', async(req, res) => {
 })
 app.patch('/updateAccount',async(req,res)=>{
 
-    const response = await updateAccount(req.body.id, req.query);
+    const response = await updateAccount(req.query.id, req.body);
     response === '' ? res.send({status:"Success"}).status(204) : res.send({status:response})
 })
 app.patch('/updateLead',async(req,res)=>{
-    const response = await updateLead(req.body.id,req.query);
+    const response = await updateLead(req.query.id,req.body);
     response === '' ? res.send({status:"Success"}).status(204) : res.send({status:response})
 })
 app.patch('/updateContact',async(req,res)=>{
 
-    const response = await updateContact(req.body.id, req.query);
+    const response = await updateContact(req.query.id, req.body);
     response === '' ? res.send({status:"Success"}).status(204) : res.send({status:response})
 })
 app.patch('/updateOpportunity',async(req,res)=>{
 
-    const response = await updateOpportunity(req.body.id, req.query);
+    const response = await updateOpportunity(req.query.id, req.body);
     response === '' ? res.send({status:"Success"}).status(204) : res.send({status:response})
 })
 
