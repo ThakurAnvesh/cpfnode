@@ -1,8 +1,7 @@
 const { default: axios } = require("axios")
 
-const Token  = "00D2w00000Rsgrm!ARoAQF_dVID68S733jreC4vIdGsBCai6irhryAxwjEeI1e8WSEhEHKMQcHKojtvuAv.O5ADq.5U7rQYRtSLwCJd4x5jqbZjz"
-const URL = "https://nineleaps5-dev-ed.develop.my.salesforce.com/services/data/v57.0/sobjects"
-
+const Token  = "00D2w00000RskIo!AQkAQIFI4vgWVigvieo4raJtDYdY2mPeXLU7p1vZh8Cr3vz27__sKLVFEm6ELI5MeW31iGhdgNatUqxqqsRtAP77nKNPkBR4"
+const URL = "https://nineleapstechnologysolutio2-dev-ed.develop.my.salesforce.com/services/data/v57.0/graphql"
 const config = {
         headers: { Authorization: `Bearer ${Token}`  } 
     };
@@ -23,14 +22,14 @@ const updateLead = async(id,...args) => {
 
 const updateContact = async(id,...args) => {
     let error = ''; 
-    await axios.post(`${URL}/Contact/${id}`, ...args, config)
+    await axios.patch(`${URL}/Contact/${id}`, ...args, config)
         .catch(err => error = err.code);
         return error; 
 }
 
 const updateOpportunity = async(id,...args) => {
         let error = '';
-        await axios.post(`${URL}/Opportunity/${id}`, ...args, config)
+        await axios.patch(`${URL}/Opportunity/${id}`, ...args, config)
         .catch(err => error = err.code);
         return error;  
     }
