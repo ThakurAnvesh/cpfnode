@@ -36,23 +36,23 @@ app.get("/filterLeads", async(req,res)=>{
     res.send(await readFilteredLeads(req.query.status, req.query.month, req.query.year, req.query.day) );
 })
 app.post('/newAccount', async(req, res) => {
-    await createAccount(req.query.name, req.query.shippingCity);
-    return res.status(201).send("Account created!")
+    const response = await createAccount(req.query.name, req.query.shippingCity);
+    response === '' ? res.send({status:"success"}).status(201) : res.send({error : "Provide required fields"})
 });
 
 app.post('/newLead', async(req, res) => {
-    await createLead(req.query.firstName, req.query.lastName, req.query.company);
-    return res.status(201).send("Lead created!")
+    const response = await createLead(req.query.firstName, req.query.lastName, req.query.company);
+    response === '' ? res.send({status:"success"}).status(201) : res.send({error : "Provide required fields"})
 });
 
 app.post('/newContact', async(req, res) => {
-    await createContact(req.query.firstName, req.query.lastName, req.query.accountId);
-    return res.status(201).send("Contact created!")
+    const response = await createContact(req.query.firstName, req.query.lastName, req.query.accountId);
+    response === '' ? res.send({status:"success"}).status(201) : res.send({error : "Provide required fields"})
 });
 
 app.post('/newOpportunity', async(req, res) => {
-    await createOpportunity(req.query.name, req.query.stageName, req.query.closeDate);
-    return res.status(201).send("Opportunity created!")
+    const response = await createOpportunity(req.query.name, req.query.stageName, req.query.closeDate);
+    response === '' ? res.send({status:"success"}).status(201) : res.send({error : "Provide required fields"})
 })
 app.patch('/updateAccount',async(req,res)=>{
 
