@@ -1,14 +1,21 @@
 const { GraphQLClient, gql } = require("graphql-request")
 
-const Token  = "00D2w00000RskIo!AQkAQIFI4vgWVigvieo4raJtDYdY2mPeXLU7p1vZh8Cr3vz27__sKLVFEm6ELI5MeW31iGhdgNatUqxqqsRtAP77nKNPkBR4"
-const URL = "https://nineleapstechnologysolutio2-dev-ed.develop.my.salesforce.com/services/data/v57.0/graphql"
-const graphqlClient = new GraphQLClient(URL, {
-    headers: { 
-            Authorization: `Bearer ${Token}`
-    },
-});
+const URL = "https://nineleaps-dev-ed.develop.my.salesforce.com/services/data/v57.0/graphql"
+
+// const graphqlClient = new GraphQLClient(URL, {
+//     headers: { 
+//             Authorization: `Bearer ${Token}`
+//     },
+// });
     
 const readAccounts = async(token) => {  
+  
+  const graphqlClient = new GraphQLClient(URL, {
+      headers: { 
+              Authorization: `Bearer ${token}`
+      },
+  });
+
   const query = gql`
       query accounts {
         uiapi {
@@ -60,8 +67,12 @@ const readAccounts = async(token) => {
     return resultArr;
 }
 
-
-const readLeads = async() => {    
+const readLeads = async(token) => {    
+  const graphqlClient = new GraphQLClient(URL, {
+      headers: { 
+              Authorization: `Bearer ${token}`
+      },
+  });
     const query = gql`
     query leads{
       uiapi{
@@ -99,8 +110,13 @@ const readLeads = async() => {
     return resultArr;
 }
 
+const readContacts = async(token) => {    
+  const graphqlClient = new GraphQLClient(URL, {
+        headers: { 
+              Authorization: `Bearer ${token}`
+      },
+  });
 
-const readContacts = async() => {    
     const query = gql`
         query contacts{
   uiapi{
@@ -130,7 +146,12 @@ const readContacts = async() => {
     return resultArr;
 }
 
-const readOpportunity = async()=>{
+const readOpportunity = async(token)=>{
+  const graphqlClient = new GraphQLClient(URL, {
+      headers: { 
+              Authorization: `Bearer ${token}`
+      },
+  });
   const query = gql`
   query Opportunity {
     uiapi {
@@ -287,12 +308,6 @@ const readFilteredLeads = async(status, month, year,day) =>{
    const totalCount = results.uiapi.query.Lead.totalCount;
    return {resultArr, totalCount};
 }
-
-//consumer key
-// 3MVG9n_HvETGhr3DS80tHTuDlemT7Sd2kecbZbGIe7FtvkjhgTsFQN9h_ptUAgG6sOuYogIq0gEBDYquEQ_OH
-
-//Secret
-// 36F8B2711A59FD03A884B3F960DC31EB9E969628A0291D2CF18E584A7CA6403E
 
 const readAccountByName = async(name)=>{
   const query = gql` 

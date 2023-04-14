@@ -6,35 +6,38 @@ const { getToken } = require('sf-jwt-token');
 const fs = require("fs");
 
 const app = express();
-const jsforce = require('jsforce');
 const bodyParser = require('body-parser');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-let Token = '';
 const privateKey = fs.readFileSync("server.key").toString('utf-8');
 
 app.get('/', (req, res) => {
-    res.send("Hey! Welcome to Copilot force");
+    res.send("Hey! Welcome to Co-pilot force");
 })
 
 app.get('/account', async(req, res) => {
-    res.send(await readAccounts(Token));
+    const authHeader = req.header('Authorization').split(" ")[1]
+    res.send(await readAccounts(authHeader));
 });
+
 app.get('/account/name', async(req, res) => {
     res.send(await readAccountByName(req.query.name));
 });
 app.get('/lead', async(req, res) => {
-    res.send(await readLeads());
+    const authHeader = req.header('Authorization').split(" ")[1]
+    res.send(await readLeads(authHeader));
 });
 
 app.get('/contact', async(req, res) => {
-    res.send(await readContacts());
+    const authHeader = req.header('Authorization').split(" ")[1]
+    res.send(await readContacts(authHeader));
 });
 
 app.get('/opportunity', async(req, res) => {
-    res.send(await readOpportunity());
+    const authHeader = req.header('Authorization').split(" ")[1]
+    res.send(await readOpportunity(authHeader));
 });
 
 app.get("/filterOpportunity", async(req,res)=>{
@@ -81,38 +84,11 @@ app.patch('/updateOpportunity',async(req,res)=>{
     response === '' ? res.send({status:"Success"}).status(204) : res.send({status:response})
 })
 
-app.get('/oauth2/auth', async(req, res) => {
-    // userLogin();
-    const outh2 = new jsforce.OAuth2({
-        clientId: '3MVG9n_HvETGhr3DS80tHTuDlemT7Sd2kecbZbGIe7FtvkjhgTsFQN9h_ptUAgG6sOuYogIq0gEBDYquEQ_OH',
-        clientSecret: '36F8B2711A59FD03A884B3F960DC31EB9E969628A0291D2CF18E584A7CA6403E',
-        redirectUri: 'http://localhost:3001/getToken'
-    });
-    res.redirect(outh2.getAuthorizationUrl({}));
-});
-
-app.get('/getToken', function(req,res) {
-  const conn = new jsforce.Connection(
-    { oauth2: new jsforce.OAuth2({
-        clientId: '3MVG9n_HvETGhr3DS80tHTuDlemT7Sd2kecbZbGIe7FtvkjhgTsFQN9h_ptUAgG6sOuYogIq0gEBDYquEQ_OH',
-        clientSecret: '36F8B2711A59FD03A884B3F960DC31EB9E969628A0291D2CF18E584A7CA6403E',
-        redirectUri: 'http://localhost:3001/getToken'
-  })});
-  
-  conn.authorize(req.query.code, function(err, userInfo) {
-    if (err) {
-      return console.error(err);
-    }
-    Token = conn.accessToken;
-    console.log(conn.accessToken, conn.instanceUrl); // access token via oauth2
-  });
-});
-
 app.get('/login', async(req, res) => {
     try {
     const jwtTokenResponse = await getToken({
         iss: "3MVG9n_HvETGhr3DS80tHTuDleiiWwAOTMV6i0YulG.VEtg2Dq50yk6MM.KVqP5s4CjjQvp3HfJ9WvM4M5YQO",
-        sub: "priyabansal01312@gmail.com",
+        sub: "anvesh.thakur@nineleaps.com",
         aud: "https://login.salesforce.com",
         privateKey: privateKey,
     })
