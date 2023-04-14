@@ -23,7 +23,8 @@ app.get('/account', async(req, res) => {
 });
 
 app.get('/account/name', async(req, res) => {
-    res.send(await readAccountByName(req.query.name));
+    const authHeader = req.header('Authorization').split(" ")[1]
+    res.send(await readAccountByName(authHeader,req.query.name));
 });
 app.get('/lead', async(req, res) => {
     const authHeader = req.header('Authorization').split(" ")[1]
@@ -41,10 +42,12 @@ app.get('/opportunity', async(req, res) => {
 });
 
 app.get("/filterOpportunity", async(req,res)=>{
-    res.send(await readFilteredOpportunity(req?.query?.status, req?.query?.month, req?.query?.year, req?.query?.day) );
+    const authHeader = req.header('Authorization').split(" ")[1]
+    res.send(await readFilteredOpportunity(authHeader,req?.query?.status, req?.query?.month, req?.query?.year, req?.query?.day) );
 })
 app.get("/filterLeads", async(req,res)=>{
-    res.send(await readFilteredLeads(req.query.status, req.query.month, req.query.year, req.query.day) );
+    const authHeader = req.header('Authorization').split(" ")[1]
+    res.send(await readFilteredLeads(authHeader,req.query.status, req.query.month, req.query.year, req.query.day) );
 })
 app.post('/newAccount', async(req, res) => {
     const response = await createAccount(req.query.name, req.query.shippingCity, req.query);
