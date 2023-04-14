@@ -1,14 +1,28 @@
 const { GraphQLClient, gql } = require("graphql-request")
 
-const Token  = "00D2w00000Rsgrm!ARoAQNcGqPTotE7rBr4hc0SYAwwFbVJmXjyu0h6vV.gURv3WjCTVIbqGa65AjeI2zQwkhG9L504VmIvp28CAs.u3xH6rasl."
+// const Token  = "00D2w00000Rsgrm!ARoAQNcGqPTotE7rBr4hc0SYAwwFbVJmXjyu0h6vV.gURv3WjCTVIbqGa65AjeI2zQwkhG9L504VmIvp28CAs.u3xH6rasl."
+// const URL = "https://nineleaps5-dev-ed.develop.my.salesforce.com/services/data/v57.0/graphql"
+// const graphqlClient = new GraphQLClient(URL, {
+//     headers: { 
+//             Authorization: `Bearer ${Token}`
+//     },
+// });
 const URL = "https://nineleaps5-dev-ed.develop.my.salesforce.com/services/data/v57.0/graphql"
-const graphqlClient = new GraphQLClient(URL, {
-    headers: { 
-            Authorization: `Bearer ${Token}`
-    },
-});
+
+// const graphqlClient = new GraphQLClient(URL, {
+//     headers: { 
+//             Authorization: `Bearer ${Token}`
+//     },
+// });
     
 const readAccounts = async(token) => {  
+  
+  const graphqlClient = new GraphQLClient(URL, {
+      headers: { 
+              Authorization: `Bearer ${token}`
+      },
+  });
+
   const query = gql`
       query accounts {
         uiapi {
@@ -60,8 +74,12 @@ const readAccounts = async(token) => {
     return resultArr;
 }
 
-
-const readLeads = async() => {    
+const readLeads = async(token) => {    
+  const graphqlClient = new GraphQLClient(URL, {
+      headers: { 
+              Authorization: `Bearer ${token}`
+      },
+  });
     const query = gql`
     query leads{
       uiapi{
@@ -99,8 +117,13 @@ const readLeads = async() => {
     return resultArr;
 }
 
+const readContacts = async(token) => {    
+  const graphqlClient = new GraphQLClient(URL, {
+        headers: { 
+              Authorization: `Bearer ${token}`
+      },
+  });
 
-const readContacts = async() => {    
     const query = gql`
         query contacts{
   uiapi{
@@ -130,7 +153,12 @@ const readContacts = async() => {
     return resultArr;
 }
 
-const readOpportunity = async()=>{
+const readOpportunity = async(token)=>{
+  const graphqlClient = new GraphQLClient(URL, {
+      headers: { 
+              Authorization: `Bearer ${token}`
+      },
+  });
   const query = gql`
   query Opportunity {
     uiapi {
@@ -288,12 +316,6 @@ const readFilteredLeads = async(status, month, year,day) =>{
    return {resultArr, totalCount};
 }
 
-//consumer key
-// 3MVG9n_HvETGhr3DS80tHTuDlemT7Sd2kecbZbGIe7FtvkjhgTsFQN9h_ptUAgG6sOuYogIq0gEBDYquEQ_OH
-
-//Secret
-// 36F8B2711A59FD03A884B3F960DC31EB9E969628A0291D2CF18E584A7CA6403E
-
 const readAccountByName = async(name)=>{
   const query = gql` 
     query accounts($name:String) {
@@ -351,57 +373,46 @@ const readAccountByName = async(name)=>{
 
 const readLeadByName = async(name)=>{
   const query = gql` 
-    query accounts($name:String) {
-        uiapi {
-             query {
-                 Account(first: 50, 
-                 where:{
-                     and:[
-                          {Name:{eq : $name}}
-                     ]
-                 }) {
-                  totalCount   
-                  edges {
-                         node {
-                             Id
-                              Name {
-                                 value
-                             }
-                             AccountNumber{
-                               value
-                             }
-                             Contacts{
-                               edges{
-                                 node{
-                                   title: Name{
-                                     value
-                                   }
-                                 }
-                               }
-                             }
-                           Cases {
-                             edges {
-                               node {
-                                 CaseNumber {
-                                   value
-                                 }
-                               }
-                             }
-                           }
-                         }
-                     }
-                 }
-             }
+  query leads($name:String){
+    uiapi{
+        query{
+            Lead(first: 50,
+              where:{
+                and:[
+                  {Name:{eq: $name}}
+                ]
+              }){
+                totalCount
+                edges{
+                    node{
+                        Id
+                        Name{
+                            value
+                        }
+                        Company{
+                            value
+                        }
+                        Status{
+                            value
+                        }
+                        LeadSource{
+                            value
+                        }
+                    
+                    }
+                }
+            }
         }
     }
+  }
   `;
   const resultArr = [];
    const results = await graphqlClient.request(query ,{name});
-   results.uiapi.query.Account.edges.map(item =>{
+   results.uiapi.query.Lead.edges.map(item =>{
     resultArr.push(item.node);
    });
-   resultArr.push(results.uiapi.query.Account.totalCount);
+   resultArr.push(results.uiapi.query.Lead.totalCount);
    return resultArr;
 }
 
-module.exports = {readAccounts, readLeads, readContacts, readOpportunity,readFilteredOpportunity, readFilteredLeads,readAccountByName}
+module.exports = {readAccounts, readLeads, readContacts, readOpportunity,readFilteredOpportunity, readFilteredLeads,readAccountByName, readLeadByName}
