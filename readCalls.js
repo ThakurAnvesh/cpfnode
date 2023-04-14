@@ -214,7 +214,12 @@ const readOpportunity = async(token)=>{
 
 }
 
-const readFilteredOpportunity = async(status, month, year,day) =>{
+const readFilteredOpportunity = async(token , status, month, year,day) =>{
+  const graphqlClient = new GraphQLClient(URL, {
+    headers: { 
+            Authorization: `Bearer ${token}`
+    },
+});
   const query = gql`
   query opportunitiesClosingSoonExplicitAND($status : Picklist, $month : Long, $year : Long, $day :Long) {
   uiapi {
@@ -266,7 +271,12 @@ const readFilteredOpportunity = async(status, month, year,day) =>{
    return {resultArr,totalCount};
 }
 
-const readFilteredLeads = async(status, month, year,day) =>{
+const readFilteredLeads = async(token,status, month, year,day) =>{
+  const graphqlClient = new GraphQLClient(URL, {
+    headers: { 
+            Authorization: `Bearer ${token}`
+    },
+});
   const query = gql`
   query Lead($status : Picklist, $month : Long, $year : Long, $day :Long) {
     uiapi {
@@ -316,7 +326,12 @@ const readFilteredLeads = async(status, month, year,day) =>{
    return {resultArr, totalCount};
 }
 
-const readAccountByName = async(name)=>{
+const readAccountByName = async(token ,name)=>{
+  const graphqlClient = new GraphQLClient(URL, {
+    headers: { 
+            Authorization: `Bearer ${token}`
+    },
+});
   const query = gql` 
     query accounts($name:String) {
         uiapi {
