@@ -1,6 +1,6 @@
 const { default: axios } = require("axios")
 
-const Token  = "00D2w00000Rsgrm!ARoAQF_dVID68S733jreC4vIdGsBCai6irhryAxwjEeI1e8WSEhEHKMQcHKojtvuAv.O5ADq.5U7rQYRtSLwCJd4x5jqbZjz"
+const Token  = "00D2w00000Rsgrm!ARoAQNcGqPTotE7rBr4hc0SYAwwFbVJmXjyu0h6vV.gURv3WjCTVIbqGa65AjeI2zQwkhG9L504VmIvp28CAs.u3xH6rasl."
 const URL = "https://nineleaps5-dev-ed.develop.my.salesforce.com/services/data/v57.0/sobjects"
 
 const config = {
@@ -23,14 +23,14 @@ const updateLead = async(id,...args) => {
 
 const updateContact = async(id,...args) => {
     let error = ''; 
-    await axios.post(`${URL}/Contact/${id}`, ...args, config)
+    await axios.patch(`${URL}/Contact/${id}`, ...args, config)
         .catch(err => error = err.code);
         return error; 
 }
 
 const updateOpportunity = async(id,...args) => {
         let error = '';
-        await axios.post(`${URL}/Opportunity/${id}`, ...args, config)
+        await axios.patch(`${URL}/Opportunity/${id}`, ...args, config)
         .catch(err => error = err.code);
         return error;  
     }

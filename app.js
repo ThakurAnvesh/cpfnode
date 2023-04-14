@@ -39,6 +39,9 @@ app.get("/filterOpportunity", async(req,res)=>{
 app.get("/filterLeads", async(req,res)=>{
     res.send(await readFilteredLeads(req.query.status, req.query.month, req.query.year, req.query.day) );
 })
+
+
+
 app.post('/newAccount', async(req, res) => {
     const response = await createAccount(req.query.name, req.query.shippingCity, req.query);
     response === '' ? res.send({status:"success"}).status(201) : res.send({error : response})
@@ -58,6 +61,9 @@ app.post('/newOpportunity', async(req, res) => {
     const response = await createOpportunity(req.query.name, req.query.stageName, req.query.closeDate, req.query);
     response === '' ? res.send({status:"success"}).status(201) : res.send({error : response})
 })
+
+
+
 app.patch('/updateAccount',async(req,res)=>{
 
     const response = await updateAccount(req.query.id, req.body);
@@ -77,6 +83,8 @@ app.patch('/updateOpportunity',async(req,res)=>{
     const response = await updateOpportunity(req.query.id, req.body);
     response === '' ? res.send({status:"Success"}).status(204) : res.send({status:response})
 })
+
+
 
 app.get('/oauth2/auth', async(req, res) => {
     // userLogin();

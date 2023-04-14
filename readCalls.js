@@ -1,6 +1,6 @@
 const { GraphQLClient, gql } = require("graphql-request")
 
-const Token  = "00D2w00000Rsgrm!ARoAQF_dVID68S733jreC4vIdGsBCai6irhryAxwjEeI1e8WSEhEHKMQcHKojtvuAv.O5ADq.5U7rQYRtSLwCJd4x5jqbZjz"
+const Token  = "00D2w00000Rsgrm!ARoAQNcGqPTotE7rBr4hc0SYAwwFbVJmXjyu0h6vV.gURv3WjCTVIbqGa65AjeI2zQwkhG9L504VmIvp28CAs.u3xH6rasl."
 const URL = "https://nineleaps5-dev-ed.develop.my.salesforce.com/services/data/v57.0/graphql"
 const graphqlClient = new GraphQLClient(URL, {
     headers: { 
@@ -295,6 +295,61 @@ const readFilteredLeads = async(status, month, year,day) =>{
 // 36F8B2711A59FD03A884B3F960DC31EB9E969628A0291D2CF18E584A7CA6403E
 
 const readAccountByName = async(name)=>{
+  const query = gql` 
+    query accounts($name:String) {
+        uiapi {
+             query {
+                 Account(first: 50, 
+                 where:{
+                     and:[
+                          {Name:{eq : $name}}
+                     ]
+                 }) {
+                  totalCount   
+                  edges {
+                         node {
+                             Id
+                              Name {
+                                 value
+                             }
+                             AccountNumber{
+                               value
+                             }
+                             Contacts{
+                               edges{
+                                 node{
+                                   title: Name{
+                                     value
+                                   }
+                                 }
+                               }
+                             }
+                           Cases {
+                             edges {
+                               node {
+                                 CaseNumber {
+                                   value
+                                 }
+                               }
+                             }
+                           }
+                         }
+                     }
+                 }
+             }
+        }
+    }
+  `;
+  const resultArr = [];
+   const results = await graphqlClient.request(query ,{name});
+   results.uiapi.query.Account.edges.map(item =>{
+    resultArr.push(item.node);
+   });
+   resultArr.push(results.uiapi.query.Account.totalCount);
+   return resultArr;
+}
+
+const readLeadByName = async(name)=>{
   const query = gql` 
     query accounts($name:String) {
         uiapi {
