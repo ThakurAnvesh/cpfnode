@@ -2,14 +2,18 @@ const express = require('express');
 const { readAccounts, readLeads, readContacts, readOpportunity, readFilteredOpportunity, readFilteredLeads, readAccountByName } = require('./readCalls');
 const { createAccount, createLead , createOpportunity} = require('./writeCalls');
 const {updateAccount, updateContact, updateLead, updateOpportunity} = require('./updateCalls');
+const { getToken } = require('sf-jwt-token'); 
+const fs = require("fs");
+
 const app = express();
 const jsforce = require('jsforce');
 const bodyParser = require('body-parser');
-app.use(bodyParser.urlencoded({ extended: true }));
 
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 let Token = '';
+const privateKey = fs.readFileSync("server.key").toString('utf-8');
 
 app.get('/', (req, res) => {
     res.send("Hey! Welcome to Copilot force");
@@ -73,7 +77,6 @@ app.patch('/updateContact',async(req,res)=>{
     response === '' ? res.send({status:"Success"}).status(204) : res.send({status:response})
 })
 app.patch('/updateOpportunity',async(req,res)=>{
-
     const response = await updateOpportunity(req.query.id, req.body);
     response === '' ? res.send({status:"Success"}).status(204) : res.send({status:response})
 })
@@ -103,6 +106,23 @@ app.get('/getToken', function(req,res) {
     Token = conn.accessToken;
     console.log(conn.accessToken, conn.instanceUrl); // access token via oauth2
   });
+});
+
+app.get('/login', async(req, res) => {
+    try {
+    const jwtTokenResponse = await getToken({
+        iss: "3MVG9n_HvETGhr3DS80tHTuDleiiWwAOTMV6i0YulG.VEtg2Dq50yk6MM.KVqP5s4CjjQvp3HfJ9WvM4M5YQO",
+        sub: "priyabansal01312@gmail.com",
+        aud: "https://login.salesforce.com",
+        privateKey: privateKey,
+    })
+        console.log("instanceUrl", jwtTokenResponse.instance_url)
+        console.log("accessToken", jwtTokenResponse.access_token)
+        if(jwtTokenResponse.access_token) res.send("Successfully Authenticated")
+    } catch (error) {
+        console.log(error.statusCode);
+        res.send(error.body)
+    }
 });
 
 app.listen(3001, () => {
