@@ -1,6 +1,6 @@
 const { GraphQLClient, gql } = require("graphql-request")
 
-// const Token  = "00D2w00000Rsgrm!ARoAQNcGqPTotE7rBr4hc0SYAwwFbVJmXjyu0h6vV.gURv3WjCTVIbqGa65AjeI2zQwkhG9L504VmIvp28CAs.u3xH6rasl."
+  const Token  = "00D2w00000Rsgrm!ARoAQNcGqPTotE7rBr4hc0SYAwwFbVJmXjyu0h6vV.gURv3WjCTVIbqGa65AjeI2zQwkhG9L504VmIvp28CAs.u3xH6rasl."
 // const URL = "https://nineleaps5-dev-ed.develop.my.salesforce.com/services/data/v57.0/graphql"
 // const graphqlClient = new GraphQLClient(URL, {
 //     headers: { 
@@ -15,11 +15,11 @@ const URL = "https://nineleaps5-dev-ed.develop.my.salesforce.com/services/data/v
 //     },
 // });
     
-const readAccounts = async(token) => {  
+const readAccounts = async() => {  
   
   const graphqlClient = new GraphQLClient(URL, {
       headers: { 
-              Authorization: `Bearer ${token}`
+              Authorization: `Bearer ${Token}`
       },
   });
 
@@ -77,7 +77,7 @@ const readAccounts = async(token) => {
 const readLeads = async(token) => {    
   const graphqlClient = new GraphQLClient(URL, {
       headers: { 
-              Authorization: `Bearer ${token}`
+              Authorization: `Bearer ${Token}`
       },
   });
     const query = gql`
@@ -120,7 +120,7 @@ const readLeads = async(token) => {
 const readContacts = async(token) => {    
   const graphqlClient = new GraphQLClient(URL, {
         headers: { 
-              Authorization: `Bearer ${token}`
+              Authorization: `Bearer ${Token}`
       },
   });
 
@@ -156,7 +156,7 @@ const readContacts = async(token) => {
 const readOpportunity = async(token)=>{
   const graphqlClient = new GraphQLClient(URL, {
       headers: { 
-              Authorization: `Bearer ${token}`
+              Authorization: `Bearer ${Token}`
       },
   });
   const query = gql`
@@ -217,7 +217,7 @@ const readOpportunity = async(token)=>{
 const readFilteredOpportunity = async(token , status, month, year,day) =>{
   const graphqlClient = new GraphQLClient(URL, {
     headers: { 
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${Token}`
     },
 });
   const query = gql`
@@ -274,7 +274,7 @@ const readFilteredOpportunity = async(token , status, month, year,day) =>{
 const readFilteredLeads = async(token,status, month, year,day) =>{
   const graphqlClient = new GraphQLClient(URL, {
     headers: { 
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${Token}`
     },
 });
   const query = gql`
@@ -288,7 +288,7 @@ const readFilteredLeads = async(token,status, month, year,day) =>{
               { CreatedDate: { CALENDAR_YEAR: { value: { eq: $year } }, CALENDAR_MONTH:{ value: { eq: $month }},  DAY_IN_MONTH: {value: { eq: $day} }} }
             ]
           }
-        ){
+        ){Token
           edges {
             node {
               Id
@@ -329,7 +329,7 @@ const readFilteredLeads = async(token,status, month, year,day) =>{
 const readAccountByName = async(token ,name)=>{
   const graphqlClient = new GraphQLClient(URL, {
     headers: { 
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${Token}`
     },
 });
   const query = gql` 
@@ -387,6 +387,11 @@ const readAccountByName = async(token ,name)=>{
 }
 
 const readLeadByName = async(name)=>{
+  const graphqlClient = new GraphQLClient(URL, {
+    headers: { 
+            Authorization: `Bearer ${Token}`
+    },
+});
   const query = gql` 
   query leads($name:String){
     uiapi{

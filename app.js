@@ -1,6 +1,6 @@
 const express = require('express');
-const { readAccounts, readLeads, readContacts, readOpportunity, readFilteredOpportunity, readFilteredLeads, readAccountByName } = require('./readCalls');
-const { createAccount, createLead , createOpportunity} = require('./writeCalls');
+const { readAccounts, readLeads, readContacts, readOpportunity, readFilteredOpportunity, readFilteredLeads, readAccountByName, readLeadByName } = require('./readCalls');
+const { createAccount, createLead , createOpportunity, createContact} = require('./writeCalls');
 const {updateAccount, updateContact, updateLead, updateOpportunity} = require('./updateCalls');
 const { getToken } = require('sf-jwt-token'); 
 const fs = require("fs");
@@ -18,56 +18,64 @@ app.get('/', (req, res) => {
 })
 
 app.get('/account', async(req, res) => {
-    const authHeader = req.header('Authorization').split(" ")[1]
-    res.send(await readAccounts(authHeader));
+    // const authHeader = req.header('Authorization').split(" ")[1]
+    res.send(await readAccounts());
 });
 
 app.get('/account/name', async(req, res) => {
-    const authHeader = req.header('Authorization').split(" ")[1]
-    res.send(await readAccountByName(authHeader,req.query.name));
+    // const authHeader = req.header('Authorization').split(" ")[1]
+    res.send(await readAccountByName(req.query.name));
+});
+app.get('/lead/name', async(req, res) => {
+    // const authHeader = req.header('Authorization').split(" ")[1]
+    res.send(await readLeadByName(req.query.name));
 });
 app.get('/lead', async(req, res) => {
-    const authHeader = req.header('Authorization').split(" ")[1]
-    res.send(await readLeads(authHeader));
+    // const authHeader = req.header('Authorization').split(" ")[1]
+    res.send(await readLeads());
 });
 
 app.get('/contact', async(req, res) => {
-    const authHeader = req.header('Authorization').split(" ")[1]
-    res.send(await readContacts(authHeader));
+    // const authHeader = req.header('Authorization').split(" ")[1]
+    res.send(await readContacts());
 });
 
 app.get('/opportunity', async(req, res) => {
-    const authHeader = req.header('Authorization').split(" ")[1]
-    res.send(await readOpportunity(authHeader));
+    // const authHeader = req.header('Authorization').split(" ")[1]
+    res.send(await readOpportunity());
 });
 
 app.get("/filterOpportunity", async(req,res)=>{
-    const authHeader = req.header('Authorization').split(" ")[1]
-    res.send(await readFilteredOpportunity(authHeader,req?.query?.status, req?.query?.month, req?.query?.year, req?.query?.day) );
+    // const authHeader = req.header('Authorization').split(" ")[1]
+    res.send(await readFilteredOpportunity(req?.query?.status, req?.query?.month, req?.query?.year, req?.query?.day) );
 })
 app.get("/filterLeads", async(req,res)=>{
-    const authHeader = req.header('Authorization').split(" ")[1]
-    res.send(await readFilteredLeads(authHeader,req.query.status, req.query.month, req.query.year, req.query.day) );
+    // const authHeader = req.header('Authorization').split(" ")[1]
+    res.send(await readFilteredLeads(req.query.status, req.query.month, req.query.year, req.query.day) );
 })
 
 
 
 app.post('/newAccount', async(req, res) => {
+    // const authHeader = req.header('Authorization').split(" ")[1]
     const response = await createAccount(req.query.name, req.query.shippingCity, req.query);
     response === '' ? res.send({status:"success"}).status(201) : res.send({error : response})
 });
 
 app.post('/newLead', async(req, res) => {
+    // const authHeader = req.header('Authorization').split(" ")[1]
     const response = await createLead(req.query.firstName, req.query.lastName, req.query.company, req.query);
     response === '' ? res.send({status:"success"}).status(201) : res.send({error : response})
 });
 
 app.post('/newContact', async(req, res) => {
+    // const authHeader = req.header('Authorization').split(" ")[1]
     const response = await createContact(req.query.firstName, req.query.lastName, req.query.accountId, req.query);
     response === '' ? res.send({status:"success"}).status(201) : res.send({error : response})
 });
 
 app.post('/newOpportunity', async(req, res) => {
+    // const authHeader = req.header('Authorization').split(" ")[1]
     const response = await createOpportunity(req.query.name, req.query.stageName, req.query.closeDate, req.query);
     response === '' ? res.send({status:"success"}).status(201) : res.send({error : response})
 })
@@ -75,20 +83,22 @@ app.post('/newOpportunity', async(req, res) => {
 
 
 app.patch('/updateAccount',async(req,res)=>{
-
+    // const authHeader = req.header('Authorization').split(" ")[1]
     const response = await updateAccount(req.query.id, req.body);
     response === '' ? res.send({status:"Success"}).status(204) : res.send({status:response})
 })
 app.patch('/updateLead',async(req,res)=>{
+    // const authHeader = req.header('Authorization').split(" ")[1]
     const response = await updateLead(req.query.id,req.body);
     response === '' ? res.send({status:"Success"}).status(204) : res.send({status:response})
 })
 app.patch('/updateContact',async(req,res)=>{
-
+    // const authHeader = req.header('Authorization').split(" ")[1]
     const response = await updateContact(req.query.id, req.body);
     response === '' ? res.send({status:"Success"}).status(204) : res.send({status:response})
 })
 app.patch('/updateOpportunity',async(req,res)=>{
+    // const authHeader = req.header('Authorization').split(" ")[1]
     const response = await updateOpportunity(req.query.id, req.body);
     response === '' ? res.send({status:"Success"}).status(204) : res.send({status:response})
 })
