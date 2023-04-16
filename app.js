@@ -1,5 +1,5 @@
 const express = require('express');
-const { readAccounts, readLeads, readContacts, readOpportunity, readFilteredOpportunity, readFilteredLeads, readAccountByName } = require('./readCalls');
+const { readAccounts, readLeads, readContacts, readOpportunity, readFilteredOpportunity, readFilteredLeads, readAccountByName, readLeadByName } = require('./readCalls');
 const { createAccount, createLead , createOpportunity} = require('./writeCalls');
 const {updateAccount, updateContact, updateLead, updateOpportunity} = require('./updateCalls');
 const { getToken } = require('sf-jwt-token'); 
@@ -31,6 +31,11 @@ app.get('/lead', async(req, res) => {
     res.send(await readLeads(authHeader));
 });
 
+app.get('/lead/name', async(req, res) => {
+    const authHeader = req.header('Authorization').split(" ")[1]
+    res.send(await readLeadByName(authHeader,req.query.name));
+});
+
 app.get('/contact', async(req, res) => {
     const authHeader = req.header('Authorization').split(" ")[1]
     res.send(await readContacts(authHeader));
@@ -53,43 +58,49 @@ app.get("/filterLeads", async(req,res)=>{
 
 
 app.post('/newAccount', async(req, res) => {
-    const response = await createAccount(req.query.name, req.query.shippingCity, req.query);
+    const authHeader = req.header('Authorization').split(" ")[1]
+    const response = await createAccount(authHeader, req.query.name, req.query.shippingCity, req.query);
     response === '' ? res.send({status:"success"}).status(201) : res.send({error : response})
 });
 
 app.post('/newLead', async(req, res) => {
-    const response = await createLead(req.query.firstName, req.query.lastName, req.query.company, req.query);
+    const authHeader = req.header('Authorization').split(" ")[1]
+    const response = await createLead(authHeader, req.query.firstName, req.query.lastName, req.query.company, req.query);
     response === '' ? res.send({status:"success"}).status(201) : res.send({error : response})
 });
 
 app.post('/newContact', async(req, res) => {
-    const response = await createContact(req.query.firstName, req.query.lastName, req.query.accountId, req.query);
+    const authHeader = req.header('Authorization').split(" ")[1]
+    const response = await createContact(authHeader, req.query.firstName, req.query.lastName, req.query.accountId, req.query);
     response === '' ? res.send({status:"success"}).status(201) : res.send({error : response})
 });
 
 app.post('/newOpportunity', async(req, res) => {
-    const response = await createOpportunity(req.query.name, req.query.stageName, req.query.closeDate, req.query);
+    const authHeader = req.header('Authorization').split(" ")[1]
+    const response = await createOpportunity(authHeader, req.query.name, req.query.stageName, req.query.closeDate, req.query);
     response === '' ? res.send({status:"success"}).status(201) : res.send({error : response})
 })
 
 
 
 app.patch('/updateAccount',async(req,res)=>{
-
-    const response = await updateAccount(req.query.id, req.body);
+    const authHeader = req.header('Authorization').split(" ")[1]
+    const response = await updateAccount(authHeader,req.query.id, req.body);
     response === '' ? res.send({status:"Success"}).status(204) : res.send({status:response})
 })
 app.patch('/updateLead',async(req,res)=>{
-    const response = await updateLead(req.query.id,req.body);
+    const authHeader = req.header('Authorization').split(" ")[1]
+    const response = await updateLead(authHeader,req.query.id,req.body);
     response === '' ? res.send({status:"Success"}).status(204) : res.send({status:response})
 })
 app.patch('/updateContact',async(req,res)=>{
-
-    const response = await updateContact(req.query.id, req.body);
+    const authHeader = req.header('Authorization').split(" ")[1]
+    const response = await updateContact(authHeader,req.query.id, req.body);
     response === '' ? res.send({status:"Success"}).status(204) : res.send({status:response})
 })
 app.patch('/updateOpportunity',async(req,res)=>{
-    const response = await updateOpportunity(req.query.id, req.body);
+    const authHeader = req.header('Authorization').split(" ")[1]
+    const response = await updateOpportunity(authHeader,req.query.id, req.body);
     response === '' ? res.send({status:"Success"}).status(204) : res.send({status:response})
 })
 

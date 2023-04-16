@@ -1,14 +1,13 @@
 const { default: axios } = require("axios")
 
-const Token  = "00D2w00000Rsgrm!ARoAQNcGqPTotE7rBr4hc0SYAwwFbVJmXjyu0h6vV.gURv3WjCTVIbqGa65AjeI2zQwkhG9L504VmIvp28CAs.u3xH6rasl."
 const URL = "https://nineleaps5-dev-ed.develop.my.salesforce.com/services/data/v57.0/sobjects"
 
-const config = {
-        headers: { Authorization: `Bearer ${Token}`  } 
-    };
 
-const createAccount = async(name,shippingCity,...args) => {
+const createAccount = async(token,name,shippingCity,...args) => {
     if(!name || !shippingCity) return "Provide all fields";
+    const config = {
+        headers: { Authorization: `Bearer ${token}`  } 
+    };
 
     let error = '';
     await axios.post(`${URL}/Account`, ...args, config)
@@ -17,9 +16,12 @@ const createAccount = async(name,shippingCity,...args) => {
          return error; 
 }
 
-const createLead = async(firstName, lastName, company, ...args) => {
+const createLead = async(token,firstName, lastName, company, ...args) => {
 
-    if(!firstName || !lastName || !company ) return "Provide all fields";        
+    if(!firstName || !lastName || !company ) return "Provide all fields";  
+    const config = {
+        headers: { Authorization: `Bearer ${token}`  } 
+    };      
     let error = '';
     await axios.post(`${URL}/Lead`, ...args, config)
         .then(res => console.log(res.status))
@@ -27,8 +29,11 @@ const createLead = async(firstName, lastName, company, ...args) => {
         return error; 
 }
 
-const createContact = async(firstName, lastName, accountId, ...args) => {
+const createContact = async(token, firstName, lastName, accountId, ...args) => {
     if(!firstName || !lastName || !accountId) return "Provide all fields";
+    const config = {
+        headers: { Authorization: `Bearer ${token}`  } 
+    }; 
     let error = '';
     await axios.post(`${URL}/Contact`, ...args, config)
         .then(res => console.log(res.status))
@@ -36,7 +41,10 @@ const createContact = async(firstName, lastName, accountId, ...args) => {
         return error;  
 }
 
-const createOpportunity = async(name, stageName, closeDate , ...args) => {
+const createOpportunity = async(token,name, stageName, closeDate , ...args) => {
+        const config = {
+            headers: { Authorization: `Bearer ${token}`  } 
+        }; 
         if(!name || !stageName || !closeDate) return "Provide all fields";
         let error = '';
         await axios.post(`${URL}/Opportunity`, ...args, config)
