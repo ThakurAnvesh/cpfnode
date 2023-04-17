@@ -8,10 +8,13 @@ const {
   filteredLeadQuery,
   accountByNameQuery,
   leadByNameQuery,
+  opportunityByNameQuery,
+  contactByNameQuery
 } = require("./query");
 
 const URL =
-  "https://nineleaps5-dev-ed.develop.my.salesforce.com/services/data/v57.0/graphql";
+  "https://nineleaps-dev-ed.develop.my.salesforce.com/services/data/v57.0/graphql";
+  
 
 const readAccounts = async (token) => {
   const graphqlClient = new GraphQLClient(URL, {
@@ -58,6 +61,7 @@ const readContacts = async (token) => {
   });
   return resultArr;
 };
+
 
 const readOpportunity = async (token) => {
   const graphqlClient = new GraphQLClient(URL, {
@@ -143,6 +147,35 @@ const readLeadByName = async (token,name) => {
   resultArr.push(results.uiapi.query.Lead.totalCount);
   return resultArr;
 };
+const readOpportunityByName = async (token,name) => {
+  const graphqlClient = new GraphQLClient(URL, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const resultArr = [];
+  const results = await graphqlClient.request(opportunityByNameQuery,{ name });
+  results.uiapi.query.Opportunity.edges.map((item) => {
+    resultArr.push(item.node);
+  });
+  const totalCount = results.uiapi.query.Opportunity.totalCount;
+  return { resultArr , totalCount };
+};
+const readContactByName = async (token , name) => {
+  const graphqlClient = new GraphQLClient(URL, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const resultArr = [];
+  const results = await graphqlClient.request(contactByNameQuery , { name });
+  results.uiapi.query.Contact.edges.map((item) => {
+    resultArr.push(item.node);
+  });
+  return resultArr;
+};
 
 module.exports = {
   readAccounts,
@@ -153,4 +186,6 @@ module.exports = {
   readFilteredLeads,
   readAccountByName,
   readLeadByName,
+  readOpportunityByName,
+  readContactByName
 };

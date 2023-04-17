@@ -1,6 +1,6 @@
 const { default: axios } = require("axios")
 
-const URL = "https://nineleaps5-dev-ed.develop.my.salesforce.com/services/data/v57.0/sobjects"
+const URL = "https://nineleaps-dev-ed.develop.my.salesforce.com/services/data/v57.0/sobjects"
 
 
 const createAccount = async(token,name,shippingCity,...args) => {

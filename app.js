@@ -1,5 +1,5 @@
 const express = require('express');
-const { readAccounts, readLeads, readContacts, readOpportunity, readFilteredOpportunity, readFilteredLeads, readAccountByName, readLeadByName } = require('./readCalls');
+const { readAccounts, readLeads, readContacts, readOpportunity, readFilteredOpportunity, readFilteredLeads, readAccountByName, readLeadByName, readOpportunityByName , readContactByName } = require('./readCalls');
 const { createAccount, createLead , createOpportunity} = require('./writeCalls');
 const {updateAccount, updateContact, updateLead, updateOpportunity} = require('./updateCalls');
 const { getToken } = require('sf-jwt-token'); 
@@ -12,6 +12,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 const privateKey = fs.readFileSync("server.key").toString('utf-8');
+
 
 app.get('/', (req, res) => {
     res.send("Hey! Welcome to Co-pilot force");
@@ -40,10 +41,18 @@ app.get('/contact', async(req, res) => {
     const authHeader = req.header('Authorization').split(" ")[1]
     res.send(await readContacts(authHeader));
 });
+app.get('/contact/name', async(req, res) => {
+    const authHeader = req.header('Authorization').split(" ")[1]
+    res.send(await readContactByName(authHeader ,req.query.name));
+});
 
 app.get('/opportunity', async(req, res) => {
     const authHeader = req.header('Authorization').split(" ")[1]
     res.send(await readOpportunity(authHeader));
+});
+app.get('/opportunity/name', async(req, res) => {
+    const authHeader = req.header('Authorization').split(" ")[1]
+    res.send(await readOpportunityByName(authHeader, req.query.name));
 });
 
 app.get("/filterOpportunity", async(req,res)=>{
