@@ -1,43 +1,45 @@
-const { default: axios } = require("axios")
+const { default: axios } = require("axios");
 
-const URL = "https://nineleaps5-dev-ed.develop.my.salesforce.com/services/data/v57.0/sobjects"
+const makeGraphQLURL = (url,entity,id) => {
+    return `${url}/services/data/v57.0/sobjects/${entity}/${id}`
+}
 
-const updateAccount = async(token ,id , ...args) => {
+const updateAccount = async(token ,url,id , ...args) => {
     let error = '';
     const config = {
         headers: { Authorization: `Bearer ${token}`  } 
     };
-    await axios.patch(`${URL}/Account/${id}`, ...args, config)
+    await axios.patch(makeGraphQLURL(url,'Account',id), ...args, config)
     .catch(err => {error = err.code});
     return error;
 }
 
-const updateLead = async(token,id,...args) => {
+const updateLead = async(token,url,id,...args) => {
     let error = '';
     const config = {
         headers: { Authorization: `Bearer ${token}`  } 
     };
-    await axios.patch(`${URL}/Lead/${id}`, ...args, config)
+    await axios.patch(makeGraphQLURL(url,'Lead',id), ...args, config)
         .catch(err => error = err.code);
         return error; 
 }
 
-const updateContact = async(token,id,...args) => {
+const updateContact = async(token,url,id,...args) => {
     let error = ''; 
     const config = {
         headers: { Authorization: `Bearer ${token}`  } 
     };
-    await axios.patch(`${URL}/Contact/${id}`, ...args, config)
+    await axios.patch(makeGraphQLURL(url,'Contact',id), ...args, config)
         .catch(err => error = err.code);
         return error; 
 }
 
-const updateOpportunity = async(token,id,...args) => {
+const updateOpportunity = async(token,url,id,...args) => {
         let error = '';
         const config = {
             headers: { Authorization: `Bearer ${token}`  } 
         };
-        await axios.patch(`${URL}/Opportunity/${id}`, ...args, config)
+        await axios.patch(makeGraphQLURL(url,'Opportunity',id), ...args, config)
         .catch(err => error = err.code);
         return error;  
     }
