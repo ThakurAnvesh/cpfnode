@@ -301,6 +301,75 @@ const leadByNameQuery = gql`
     }
   }
 `;
+const contactByNameQuery = gql`
+  query contacts($name: String) {
+    uiapi {
+      query {
+        Contact(first: 50, where: { and: [{ Name: { eq: $name } }] }) {
+          edges {
+            node {
+              Id
+              Name {
+                value
+              }
+              Account {
+                DisplayValue
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+const opportunityByNameQuery = gql`
+  query Opportunity($name: String) {
+    uiapi {
+      query {
+        Opportunity(first: 50, where: { and: [{ Name: { eq: $name } }] }) {
+          totalCount
+          edges {
+            node {
+              Id
+              Name {
+                value
+              }
+              CloseDate {
+                value
+              }
+              CreatedDate {
+                value
+              }
+              StageName {
+                value
+              }
+              Description {
+                value
+              }
+              Amount {
+                value
+              }
+              Account {
+                DisplayValue
+              }
+              StageName {
+                value
+              }
+              Probability {
+                value
+              }
+              LeadSource {
+                value
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+
 module.exports = {
   accountQuery,
   leadQuery,
@@ -310,4 +379,6 @@ module.exports = {
   filteredLeadQuery,
   accountByNameQuery,
   leadByNameQuery,
+  opportunityByNameQuery,
+  contactByNameQuery,
 };

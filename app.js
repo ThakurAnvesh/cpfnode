@@ -1,5 +1,5 @@
 const express = require('express');
-const { readAccounts, readLeads, readContacts, readOpportunity, readFilteredOpportunity, readFilteredLeads, readAccountByName, readLeadByName } = require('./readCalls');
+const { readAccounts, readLeads, readContacts, readOpportunity, readFilteredOpportunity, readFilteredLeads, readAccountByName, readLeadByName , readContactByName, readOpportunityByName } = require('./readCalls');
 const { createAccount, createLead , createContact,createOpportunity} = require('./writeCalls');
 const {updateAccount, updateContact, updateLead, updateOpportunity} = require('./updateCalls');
 const { getToken } = require('sf-jwt-token'); 
@@ -46,11 +46,21 @@ app.get('/contact', async(req, res) => {
     const url = req.query.url;
     res.send(await readContacts(authHeader, url));
 });
+app.get('/contact/name', async(req, res) => {
+    const authHeader = req.header('Authorization').split(" ")[1]
+    const url = req.query.url;
+    res.send(await readContactByName(authHeader , url ,req.query.name));
+});
 
 app.get('/opportunity', async(req, res) => {
     const authHeader = req.header('Authorization').split(" ")[1]
     const url = req.query.url;
     res.send(await readOpportunity(authHeader, url));
+});
+app.get('/opportunity/name', async(req, res) => {
+    const authHeader = req.header('Authorization').split(" ")[1]
+    const url = req.query.url;
+    res.send(await readOpportunityByName(authHeader, url , req.query.name));
 });
 
 app.get("/filterOpportunity", async(req,res)=>{

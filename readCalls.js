@@ -8,6 +8,9 @@ const {
   filteredLeadQuery,
   accountByNameQuery,
   leadByNameQuery,
+  contactByNameQuery,
+  opportunityByNameQuery
+
 } = require("./query");
 
 const makeGraphQLURL = (url) => {
@@ -144,6 +147,35 @@ const readLeadByName = async (token, url, name) => {
   resultArr.push(results.uiapi.query.Lead.totalCount);
   return resultArr;
 };
+const readContactByName = async (token , url , name) => {
+  const graphqlClient = new GraphQLClient(makeGraphQLURL(url), {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  const resultArr = [];
+  const results = await graphqlClient.request(contactByNameQuery , { name });
+  results.uiapi.query.Contact.edges.map((item) => {
+    resultArr.push(item.node);
+  });
+  return resultArr;
+};
+const readOpportunityByName = async (token, url , name) => {
+  const graphqlClient = new GraphQLClient(makeGraphQLURL(url), {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  const resultArr = [];
+  const results = await graphqlClient.request(opportunityByNameQuery,{ name });
+  results.uiapi.query.Opportunity.edges.map((item) => {
+    resultArr.push(item.node);
+  });
+  const totalCount = results.uiapi.query.Opportunity.totalCount;
+  return { resultArr , totalCount };
+};
+
+
 
 module.exports = {
   readAccounts,
@@ -154,4 +186,8 @@ module.exports = {
   readFilteredLeads,
   readAccountByName,
   readLeadByName,
+  readContactByName,
+  readOpportunityByName
+
+  
 };
