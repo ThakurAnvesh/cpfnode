@@ -10,11 +10,12 @@ const {
   leadByNameQuery,
 } = require("./query");
 
-const URL =
-  "https://nineleaps5-dev-ed.develop.my.salesforce.com/services/data/v57.0/graphql";
+const makeGraphQLURL = (url) => {
+  return `${url}/services/data/v57.0/graphql`
+}
 
-const readAccounts = async (token) => {
-  const graphqlClient = new GraphQLClient(URL, {
+const readAccounts = async (token, url) => {
+  const graphqlClient = new GraphQLClient(makeGraphQLURL(url), {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -29,8 +30,8 @@ const readAccounts = async (token) => {
   return resultArr;
 };
 
-const readLeads = async (token) => {
-  const graphqlClient = new GraphQLClient(URL, {
+const readLeads = async (token, url) => {
+  const graphqlClient = new GraphQLClient(makeGraphQLURL(url), {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -44,8 +45,8 @@ const readLeads = async (token) => {
   return resultArr;
 };
 
-const readContacts = async (token) => {
-  const graphqlClient = new GraphQLClient(URL, {
+const readContacts = async (token, url) => {
+  const graphqlClient = new GraphQLClient(makeGraphQLURL(url), {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -59,8 +60,8 @@ const readContacts = async (token) => {
   return resultArr;
 };
 
-const readOpportunity = async (token) => {
-  const graphqlClient = new GraphQLClient(URL, {
+const readOpportunity = async (token, url) => {
+  const graphqlClient = new GraphQLClient(makeGraphQLURL(url), {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -74,8 +75,8 @@ const readOpportunity = async (token) => {
   return resultArr;
 };
 
-const readFilteredOpportunity = async (token, status, month, year, day) => {
-  const graphqlClient = new GraphQLClient(URL, {
+const readFilteredOpportunity = async (token, url, status, month, year, day) => {
+  const graphqlClient = new GraphQLClient(makeGraphQLURL(url), {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -95,8 +96,8 @@ const readFilteredOpportunity = async (token, status, month, year, day) => {
   return { resultArr, totalCount };
 };
 
-const readFilteredLeads = async (token, status, month, year, day) => {
-  const graphqlClient = new GraphQLClient(URL, {
+const readFilteredLeads = async (token, url, status, month, year, day) => {
+  const graphqlClient = new GraphQLClient(makeGraphQLURL(url), {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -112,8 +113,8 @@ const readFilteredLeads = async (token, status, month, year, day) => {
   return { resultArr, totalCount };
 };
 
-const readAccountByName = async (token, name) => {
-  const graphqlClient = new GraphQLClient(URL, {
+const readAccountByName = async (token, url, name) => {
+  const graphqlClient = new GraphQLClient(makeGraphQLURL(url), {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -128,8 +129,8 @@ const readAccountByName = async (token, name) => {
   return resultArr;
 };
 
-const readLeadByName = async (token,name) => {
-  const graphqlClient = new GraphQLClient(URL, {
+const readLeadByName = async (token, url, name) => {
+  const graphqlClient = new GraphQLClient(makeGraphQLURL(url), {
     headers: {
       Authorization: `Bearer ${token}`,
     },

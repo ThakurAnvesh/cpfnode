@@ -4,6 +4,7 @@ const { createAccount, createLead , createOpportunity} = require('./writeCalls')
 const {updateAccount, updateContact, updateLead, updateOpportunity} = require('./updateCalls');
 const { getToken } = require('sf-jwt-token'); 
 const fs = require("fs");
+require('dotenv').config();
 
 const app = express();
 const bodyParser = require('body-parser');
@@ -19,43 +20,49 @@ app.get('/', (req, res) => {
 
 app.get('/account', async(req, res) => {
     const authHeader = req.header('Authorization').split(" ")[1]
-    res.send(await readAccounts(authHeader));
+    const url = req.query.url;
+    res.send(await readAccounts(authHeader, url));
 });
 
 app.get('/account/name', async(req, res) => {
     const authHeader = req.header('Authorization').split(" ")[1]
-    res.send(await readAccountByName(authHeader,req.query.name));
+    const url = req.query.url;
+    res.send(await readAccountByName(authHeader, url, req.query.name));
 });
 app.get('/lead', async(req, res) => {
     const authHeader = req.header('Authorization').split(" ")[1]
-    res.send(await readLeads(authHeader));
+    const url = req.query.url;
+    res.send(await readLeads(authHeader, url));
 });
 
 app.get('/lead/name', async(req, res) => {
     const authHeader = req.header('Authorization').split(" ")[1]
-    res.send(await readLeadByName(authHeader,req.query.name));
+    const url = req.query.url;
+    res.send(await readLeadByName(authHeader, url, req.query.name));
 });
 
 app.get('/contact', async(req, res) => {
     const authHeader = req.header('Authorization').split(" ")[1]
-    res.send(await readContacts(authHeader));
+    const url = req.query.url;
+    res.send(await readContacts(authHeader, url));
 });
 
 app.get('/opportunity', async(req, res) => {
     const authHeader = req.header('Authorization').split(" ")[1]
-    res.send(await readOpportunity(authHeader));
+    const url = req.query.url;
+    res.send(await readOpportunity(authHeader, url));
 });
 
 app.get("/filterOpportunity", async(req,res)=>{
     const authHeader = req.header('Authorization').split(" ")[1]
-    res.send(await readFilteredOpportunity(authHeader,req?.query?.status, req?.query?.month, req?.query?.year, req?.query?.day) );
+    const url = req.query.url;
+    res.send(await readFilteredOpportunity(authHeader, url,req?.query?.status, req?.query?.month, req?.query?.year, req?.query?.day) );
 })
 app.get("/filterLeads", async(req,res)=>{
     const authHeader = req.header('Authorization').split(" ")[1]
-    res.send(await readFilteredLeads(authHeader,req.query.status, req.query.month, req.query.year, req.query.day) );
+    const url = req.query.url;
+    res.send(await readFilteredLeads(authHeader, url,req.query.status, req.query.month, req.query.year, req.query.day) );
 })
-
-
 
 app.post('/newAccount', async(req, res) => {
     const authHeader = req.header('Authorization').split(" ")[1]
@@ -81,8 +88,6 @@ app.post('/newOpportunity', async(req, res) => {
     response === '' ? res.send({status:"success"}).status(201) : res.send({error : response})
 })
 
-
-
 app.patch('/updateAccount',async(req,res)=>{
     const authHeader = req.header('Authorization').split(" ")[1]
     const response = await updateAccount(authHeader,req.query.id, req.body);
@@ -107,14 +112,17 @@ app.patch('/updateOpportunity',async(req,res)=>{
 app.get('/login', async(req, res) => {
     try {
     const jwtTokenResponse = await getToken({
-        iss: "3MVG9n_HvETGhr3DS80tHTuDleiiWwAOTMV6i0YulG.VEtg2Dq50yk6MM.KVqP5s4CjjQvp3HfJ9WvM4M5YQO",
-        sub: "anvesh.thakur@nineleaps.com",
+        iss: process.env.CONNECTED_APP,
+        sub: req.query.email,
         aud: "https://login.salesforce.com",
         privateKey: privateKey,
     })
         console.log("instanceUrl", jwtTokenResponse.instance_url)
         console.log("accessToken", jwtTokenResponse.access_token)
-        if(jwtTokenResponse.access_token) res.send("Successfully Authenticated")
+        if(jwtTokenResponse.access_token) res.send({
+            access_token : jwtTokenResponse.access_token,
+            instance_url : jwtTokenResponse.instance_url       
+        })
     } catch (error) {
         console.log(error.statusCode);
         res.send(error.body)
