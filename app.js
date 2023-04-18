@@ -58,25 +58,25 @@ app.get("/filterLeads", async(req,res)=>{
 
 app.post('/newAccount', async(req, res) => {
     // const authHeader = req.header('Authorization').split(" ")[1]
-    const response = await createAccount(req.query.name, req.query.shippingCity, req.query);
+    const response = await createAccount( req.query);
     response === '' ? res.send({status:"success"}).status(201) : res.send({error : response})
 });
 
 app.post('/newLead', async(req, res) => {
     // const authHeader = req.header('Authorization').split(" ")[1]
-    const response = await createLead(req.query.firstName, req.query.lastName, req.query.company, req.query);
+    const response = await createLead(req.query);
     response === '' ? res.send({status:"success"}).status(201) : res.send({error : response})
 });
 
 app.post('/newContact', async(req, res) => {
     // const authHeader = req.header('Authorization').split(" ")[1]
-    const response = await createContact(req.query.firstName, req.query.lastName, req.query.accountId, req.query);
+    const response = await createContact(req.query);
     response === '' ? res.send({status:"success"}).status(201) : res.send({error : response})
 });
 
 app.post('/newOpportunity', async(req, res) => {
     // const authHeader = req.header('Authorization').split(" ")[1]
-    const response = await createOpportunity(req.query.name, req.query.stageName, req.query.closeDate, req.query);
+    const response = await createOpportunity(req.query);
     response === '' ? res.send({status:"success"}).status(201) : res.send({error : response})
 })
 
