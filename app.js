@@ -1,5 +1,5 @@
 const express = require('express');
-const { readAccounts, readLeads, readContacts, readOpportunity, readFilteredOpportunity, readFilteredLeads, readAccountByName, readLeadByName , readContactByName, readOpportunityByName } = require('./readCalls');
+const { getSchemaForObj, readAccounts, readLeads, readContacts, readOpportunity, readFilteredOpportunity, readFilteredLeads, readAccountByName, readLeadByName , readContactByName, readOpportunityByName } = require('./readCalls');
 const { createAccount, createLead , createContact,createOpportunity} = require('./writeCalls');
 const {updateAccount, updateContact, updateLead, updateOpportunity} = require('./updateCalls');
 const { getToken } = require('sf-jwt-token'); 
@@ -146,6 +146,13 @@ app.get('/login', async(req, res) => {
         res.send(error.body)
     }
 });
+
+app.get('/schema/requiredFields', async(req, res) => {
+    const authHeader = req.header('Authorization').split(" ")[1]
+    const url = req.query.url;
+    const response = await getSchemaForObj(authHeader, url, req.query.sobject);
+    res.send(response);
+})
 
 app.listen(3001, () => {
     console.log('Server started on port 3001')

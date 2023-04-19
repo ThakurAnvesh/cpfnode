@@ -12,9 +12,14 @@ const {
   opportunityByNameQuery
 
 } = require("./query");
+const axios = require('axios');
 
 const makeGraphQLURL = (url) => {
   return `${url}/services/data/v57.0/graphql`
+}
+
+const makesObjectURL = (url, sobject) => {
+  return `${url}/services/data/v57.0/sobjects/${sobject}/describe`
 }
 
 const readAccounts = async (token, url) => {
@@ -32,6 +37,24 @@ const readAccounts = async (token, url) => {
   resultArr.push(results.uiapi.query.Account.totalCount);
   return resultArr;
 };
+
+const getSchemaForObj = async(token, url, sobject) => {
+  const config = {
+        headers: { Authorization: `Bearer ${token}`  } 
+  };
+  const response = await axios.get(makesObjectURL(url, sobject), config);
+  let fields = response.data.fields
+  let fieldArr = [];
+  fields.map(field => {
+    if(!field.nillable && !field.defaultedOnCreate && field.createable){
+    fieldArr.push({
+      "name": field.name
+    })
+    if(field.name  === "LastName") fieldArr.push({"name": "FirstName"});
+  }  
+  })
+  return fieldArr;
+}
 
 const readLeads = async (token, url) => {
   const graphqlClient = new GraphQLClient(makeGraphQLURL(url), {
@@ -187,7 +210,6 @@ module.exports = {
   readAccountByName,
   readLeadByName,
   readContactByName,
-  readOpportunityByName
-
-  
+  readOpportunityByName,
+  getSchemaForObj
 };
