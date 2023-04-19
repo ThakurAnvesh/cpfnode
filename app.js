@@ -84,7 +84,6 @@ app.post('/newAccount', async(req, res) => {
 app.post('/newLead', async(req, res) => {
     const authHeader = req.header('Authorization').split(" ")[1]
     const url = req.query.url;
-    req.query.url && delete req.query.url
     const response = await createLead(authHeader, url, req.body);
     response === '' ? res.send({status:"success"}).status(201) : res.send({error : response})
 });
@@ -92,7 +91,6 @@ app.post('/newLead', async(req, res) => {
 app.post('/newContact', async(req, res) => {
     const authHeader = req.header('Authorization').split(" ")[1]
     const url = req.query.url;
-    req.query.url && delete req.query.url
     const response = await createContact(authHeader,url, req.body);
     response === '' ? res.send({status:"success"}).status(201) : res.send({error : response})
 });
@@ -100,7 +98,6 @@ app.post('/newContact', async(req, res) => {
 app.post('/newOpportunity', async(req, res) => {
     const authHeader = req.header('Authorization').split(" ")[1]
     const url = req.query.url;
-    req.query.url && delete req.query.url
     const response = await createOpportunity(authHeader,url,req.body);
     response === '' ? res.send({status:"success"}).status(201) : res.send({error : response})
 })
