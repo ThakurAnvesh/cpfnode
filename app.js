@@ -77,7 +77,7 @@ app.get("/filterLeads", async(req,res)=>{
 app.post('/newAccount', async(req, res) => {
     const authHeader = req.header('Authorization').split(" ")[1]
     const url = req.query.url;
-    const response = await createAccount(authHeader,url, req.body.name, req.body.shippingCity, req.body);
+    const response = await createAccount(authHeader,url, req.body);
     response === '' ? res.send({status:"success"}).status(201) : res.send({error : response})
 });
 
@@ -85,7 +85,7 @@ app.post('/newLead', async(req, res) => {
     const authHeader = req.header('Authorization').split(" ")[1]
     const url = req.query.url;
     req.query.url && delete req.query.url
-    const response = await createLead(authHeader, url,req.body.firstName, req.body.lastName, req.body.company, req.body);
+    const response = await createLead(authHeader, url, req.body);
     response === '' ? res.send({status:"success"}).status(201) : res.send({error : response})
 });
 
@@ -93,7 +93,7 @@ app.post('/newContact', async(req, res) => {
     const authHeader = req.header('Authorization').split(" ")[1]
     const url = req.query.url;
     req.query.url && delete req.query.url
-    const response = await createContact(authHeader,url, req.body.firstName, req.body.lastName, req.body.accountId, req.body);
+    const response = await createContact(authHeader,url, req.body);
     response === '' ? res.send({status:"success"}).status(201) : res.send({error : response})
 });
 
@@ -101,7 +101,7 @@ app.post('/newOpportunity', async(req, res) => {
     const authHeader = req.header('Authorization').split(" ")[1]
     const url = req.query.url;
     req.query.url && delete req.query.url
-    const response = await createOpportunity(authHeader,url, req.body.name, req.body.stageName, req.body.closeDate, req.body);
+    const response = await createOpportunity(authHeader,url,req.body);
     response === '' ? res.send({status:"success"}).status(201) : res.send({error : response})
 })
 
