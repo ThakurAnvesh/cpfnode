@@ -1,20 +1,10 @@
 const { GraphQLClient, gql } = require("graphql-request")
+const axios = require('axios');
 
-  const Token  = "00D2w00000Rsgrm!ARoAQPkTEfJlusmrFwL2ANFwPzYspXHZdGpkZqDLNhRlwNUwncqb1WvMcxkCEg35IG6Uvhp1wX2nV90Lby0e3K4QEUzfGjAf"
-// const URL = "https://nineleaps5-dev-ed.develop.my.salesforce.com/services/data/v57.0/graphql"
-// const graphqlClient = new GraphQLClient(URL, {
-//     headers: { 
-//             Authorization: `Bearer ${Token}`
-//     },
-// });
+const Token  = "00D2w00000Rsgrm!ARoAQPttXQ4xdmvYTDx1k9_u48Za_v3gaRwscwFViu3btO8G56NcgHDSujXAny4v4xvjZU_Ye3Sy3tIwh_cebMWQ7dG5Xp5E"
 const URL = "https://nineleaps5-dev-ed.develop.my.salesforce.com/services/data/v57.0/graphql"
+const url = "https://nineleaps5-dev-ed.develop.my.salesforce.com"
 
-// const graphqlClient = new GraphQLClient(URL, {
-//     headers: { 
-//             Authorization: `Bearer ${Token}`
-//     },
-// });
-    
 const readAccounts = async() => {  
   
   const graphqlClient = new GraphQLClient(URL, {
@@ -27,7 +17,7 @@ const readAccounts = async() => {
       query accounts {
         uiapi {
              query {
-                 Account(first: 50,orderBy : {Name: {order: ASC}}) {
+                 Account(first: 10,orderBy : {Name: {order: ASC}}) {
                      edges {
                          node {
                              Id
@@ -65,12 +55,11 @@ const readAccounts = async() => {
         }
     }    
     `
-    const resultArr = []
+    let resultArr = ""
     const results = await graphqlClient.request(query); 
-    results.uiapi.query.Account.edges.map(item => {
-        resultArr.push(item.node);
+    results.uiapi.query.Account.edges.map(item => {        
+        resultArr = resultArr.concat(item.node.Name.value + ", ");
     });
-    resultArr.push(results.uiapi.query.Account.totalCount);
     return resultArr;
 }
 
@@ -84,7 +73,7 @@ const readLeads = async(token) => {
     query leads{
       uiapi{
           query{
-              Lead(first: 50){
+              Lead(first: 10){
                   edges{
                       node{
                           Id
@@ -109,10 +98,10 @@ const readLeads = async(token) => {
   }
 
 ` 
-    const resultArr = []
+    let resultArr = ""
     const results = await graphqlClient.request(query); 
     results.uiapi.query.Lead.edges.map(item => {
-        resultArr.push(item.node);
+      resultArr = resultArr.concat(item.node.Name.value + ", ");
     });
     return resultArr;
 }
@@ -128,7 +117,7 @@ const readContacts = async(token) => {
         query contacts{
   uiapi{
     query{
-      Contact(first: 50){
+      Contact(first: 10){
         edges{
           node{
             Id
@@ -145,10 +134,10 @@ const readContacts = async(token) => {
   } 
 } 
     ` 
-    const resultArr = []
+    let resultArr = ""
     const results = await graphqlClient.request(query); 
     results.uiapi.query.Contact.edges.map(item => {
-        resultArr.push(item.node);
+      resultArr = resultArr.concat(item.node.Name.value + ", ");
     });
     return resultArr;
 }
@@ -163,7 +152,7 @@ const readOpportunity = async(token)=>{
   query Opportunity {
     uiapi {
       query {
-        Opportunity(first: 50) {
+        Opportunity(first: 10) {
           edges {
             node {
               Id
@@ -205,10 +194,10 @@ const readOpportunity = async(token)=>{
     }
   }
   `
-   const resultArr = []
+   let resultArr = ""
    const results = await graphqlClient.request(query);
    results.uiapi.query.Opportunity.edges.map(item =>{
-    resultArr.push(item.node);
+    resultArr = resultArr.concat(item.node.Name.value + ", ");
    });
    return resultArr;
 
@@ -435,4 +424,27 @@ const readLeadByName = async(name)=>{
    return resultArr;
 }
 
-module.exports = {readAccounts, readLeads, readContacts, readOpportunity,readFilteredOpportunity, readFilteredLeads,readAccountByName, readLeadByName}
+const makesObjectURL = (url, sobject) => {
+  return `${url}/services/data/v57.0/sobjects/${sobject}/describe`
+}
+
+const getSchemaForObj = async(sobject) => {
+  const config = {
+        headers: { Authorization: `Bearer ${Token}`  } 
+  };
+  
+  const response = await axios.get(makesObjectURL(url, sobject), config);
+  let fields = response.data.fields
+  let fieldArr = [];
+  fields.map(field => {
+    if(!field.nillable && !field.defaultedOnCreate && field.createable){
+    fieldArr.push({
+      "name": field.name
+    })
+    if(field.name  === "LastName") fieldArr.push({"name": "FirstName"});
+  }  
+  })
+  return fieldArr;
+}
+
+module.exports = { getSchemaForObj, readAccounts, readLeads, readContacts, readOpportunity,readFilteredOpportunity, readFilteredLeads,readAccountByName, readLeadByName}
